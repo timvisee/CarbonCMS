@@ -154,31 +154,50 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
+     * Test the constructor with relative date and time strings.
+     *
      * @covers ::__construct
      */
+    // TODO: Implement timezones in this test!
     public function testConstructorRelativeTime() {
-        // Construct a DateTime object with a relative date and time string
-        // TODO: Add a timezone check!
+        // Specify a relative time
         $relative = 'tomorrow';
+
+        // Try to construct a DateTime object with the relative time
         $dateTime = new DateTime($relative);
-        $phpDateTime = new PHPDateTime($relative);
         $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to construct a DateTime object with a relative date and time string, wrong object type');
-        $this->assertEquals($phpDateTime->format(DateTime::DEFAULT_FORMAT_DATE), $dateTime->format(DateTime::DEFAULT_FORMAT_DATE), 'Failed to construct a DateTime object with a relative date and time string, wrong date');
+
+        // Create a base date and time object to compare the other object to
+        $baseDateTime = new PHPDateTime($relative);
+
+        // Assert the date and time
+        $this->assertEquals($baseDateTime->format(DateTime::DEFAULT_FORMAT_DATE), $dateTime->format(DateTime::DEFAULT_FORMAT_DATE), 'Failed to construct a DateTime object with a relative date and time string, wrong date');
     }
 
     /**
+     * Test the constructor with now/null time.
+     *
      * @covers ::__construct
+     *
+     * @depends testConstructorPHPDateTime
      */
     public function testConstructorNow() {
-        // Construct a DateTime object with null/now
-        // TODO: Add a timezone check!
-        $phpDateTime = new PHPDateTime('now');
+        // Create a base date and time using PHPs DateTime object
+        $baseDateTime = new DateTime(new PHPDateTime('now'));
+
+        // Construct a DateTime object with the now time using null
         $dateTime = new DateTime(null);
         $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to construct a DateTime object with null, wrong object type');
-        $this->assertEquals($phpDateTime->format(DateTime::DEFAULT_FORMAT_DATE), $dateTime->format(DateTime::DEFAULT_FORMAT_DATE), 'Failed to construct a DateTime object with null, wrong date');
+
+        // Make sure the two date times don't differ much more than 3 seconds
+        $this->lessThanOrEqual(3, $baseDateTime->diffInSeconds($dateTime, true), 'Failed to construct a DateTime object with null, time difference too big');
+
+        // Construct a DateTime object with the now time using now
         $dateTime = new DateTime('now');
-        $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to construct a DateTime object with now, wrong object type');
-        $this->assertEquals($phpDateTime->format(DateTime::DEFAULT_FORMAT_DATE), $dateTime->format(DateTime::DEFAULT_FORMAT_DATE), 'Failed to construct a DateTime object with now, wrong date');
+        $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to construct a DateTime object with null, wrong object type');
+
+        // Make sure the two date times don't differ much more than 3 seconds
+        $this->lessThanOrEqual(3, $baseDateTime->diffInSeconds($dateTime, true), 'Failed to construct a DateTime object with null, time difference too big');
     }
 
     // TODO: Update the methods below

@@ -13,7 +13,7 @@ return Array(
 
     // TODO: Rename site_url -> site_domain
     // TODO: More 'general site' configuration options
-    // TODO: Add site configuration to to the Carbon CMS registery (possibly optionally!)
+    // TODO: Add site configuration to to the Carbon CMS registry (possibly optionally!)
 
     'general' => Array(
         'site_url'          => 'http://localhost/app/carbon_cms/src/',
