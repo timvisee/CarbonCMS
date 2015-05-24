@@ -11,3 +11,6 @@
 # Ignore some development directories
 /old
 /tools
+
+# Ignore log files
+/src/log.txt
