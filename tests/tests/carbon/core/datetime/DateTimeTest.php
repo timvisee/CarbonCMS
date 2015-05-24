@@ -275,7 +275,7 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * Test the createFromDate method with null parameters.
+     * Test the createFromDate method with specified date values.
      *
      * @covers ::createFromDate
      */
@@ -291,39 +291,63 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(3, $dateTime->getDay(), 'Failed to create a DateTime object with a date, wrong day');
     }
 
-
-
-    // TODO: Update the methods below
-
     /**
-     * Test whether the createFromTime method works.
+     * Test the createFromTime method with null parameters.
      *
      * @covers ::createFromTime
      */
+    // TODO: Depend the diffInSeconds() and now() test
     // TODO: Add a timezone checks!
-    public function testCreateFromTime() {
-        // Create a date with null values
+    public function testCreateFromTimeNull() {
+        // Create a DateTime object with null parameters
         $dateTime = DateTime::createFromTime();
         $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to create a DateTime object with a time, wrong object type');
-        $this->assertEquals(DateTime::now()->format(DateTime::DEFAULT_FORMAT_DATE), $dateTime->format(DateTime::DEFAULT_FORMAT_DATE), 'Failed to create a DateTime object with a time, wrong date');
-        $this->assertEquals(DateTimeUtils::getHour(), $dateTime->getHour(), 'Failed to create a DateTime object with a time, wrong hour');
 
-        // Test with specified hour
+        // Make sure the date and time object doesn't differ more than 3 seconds with the current time
+        $this->lessThanOrEqual(3, DateTime::now()->diffInSeconds($dateTime, true), 'Failed to create a DateTime object with null, time difference too big');
+    }
+
+    /**
+     * Test the createFromTime method with a specified hour.
+     *
+     * @covers ::createFromTime
+     */
+    // TODO: Depend the now() test
+    // TODO: Add a timezone checks!
+    public function testCreateFromTimeHour() {
+        // Create a DateTime object with a specified hour
         $dateTime = DateTime::createFromTime(1, null, null);
         $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to create a DateTime object with a time, wrong object type');
+
+        // Assert the date and time
         $this->assertEquals(DateTime::now()->format(DateTime::DEFAULT_FORMAT_DATE), $dateTime->format(DateTime::DEFAULT_FORMAT_DATE), 'Failed to create a DateTime object with a time, wrong date');
         $this->assertEquals(1, $dateTime->getHour(), 'Failed to create a DateTime object with a time, wrong hour');
         $this->assertEquals(0, $dateTime->getMinute(), 'Failed to create a DateTime object with a time, wrong minute');
         $this->assertEquals(0, $dateTime->getSecond(), 'Failed to create a DateTime object with a time, wrong second');
+    }
 
-        // Test with specified date values
+    /**
+     * Test the createFromTime method with specified time values.
+     *
+     * @covers ::createFromTime
+     */
+    // TODO: Depend the now() test
+    // TODO: Add a timezone checks!
+    public function testCreateFromTimeTimes() {
+        // Create a DateTime object with specified time values
         $dateTime = DateTime::createFromTime(1, 2, 3);
         $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to create a DateTime object with a time, wrong object type');
+
+        // Assert the date and time
         $this->assertEquals(DateTime::now()->format(DateTime::DEFAULT_FORMAT_DATE), $dateTime->format(DateTime::DEFAULT_FORMAT_DATE), 'Failed to create a DateTime object with a time, wrong date');
         $this->assertEquals(1, $dateTime->getHour(), 'Failed to create a DateTime object with a time, wrong hour');
         $this->assertEquals(2, $dateTime->getMinute(), 'Failed to create a DateTime object with a time, wrong minute');
         $this->assertEquals(3, $dateTime->getSecond(), 'Failed to create a DateTime object with a time, wrong second');
     }
+
+
+
+    // TODO: Update the methods below
 
     /**
      * Test whether the parse method works.
