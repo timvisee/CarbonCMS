@@ -13,7 +13,7 @@
  * @copyright Copyright (c) Tim Visee 2012-2014. All rights reserved.
  */
 
-namespace carbon\core;
+namespace carbon\core\autoloader;
 
 use carbon\core\util\ArrayUtils;
 use carbon\core\util\StringUtils;
@@ -24,7 +24,7 @@ defined('CARBON_CORE_INIT') or die('Access denied!');
 /**
  * Autoloader class
  *
- * @package carbon\core
+ * @package carbon\core\autoloader
  * @author Tim Visee
  */
 class Autoloader {

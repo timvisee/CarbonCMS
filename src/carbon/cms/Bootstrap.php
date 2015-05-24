@@ -13,35 +13,19 @@
 
 namespace carbon\cms;
 
-use carbon\core\Autoloader;
 use carbon\core\cache\CacheHandler;
 use carbon\core\config\ConfigHandler;
 use carbon\core\Core;
 use carbon\core\database\driver\mysql\Database;
-use carbon\core\database\driver\mysql\DatabaseStatement;
 use carbon\core\datetime\DateTime;
-use carbon\core\datetime\DateTimeArrayUtils;
-use carbon\core\datetime\DateTimeFactory;
-use carbon\core\datetime\DateTimeUtils;
-use carbon\core\datetime\interval\DateInterval;
-use carbon\core\datetime\interval\spec\DateIntervalSpecUtils;
-use carbon\core\datetime\zone\DateTimeZone;
 use carbon\core\ErrorHandler;
 use carbon\core\EventManager;
-use carbon\core\io\filesystem\directory\Directory;
-use carbon\core\io\filesystem\directory\DirectoryHelper;
-use carbon\core\io\filesystem\directory\DirectoryScanner;
-use carbon\core\io\filesystem\file\File;
 use carbon\core\io\filesystem\FilesystemObject;
-use carbon\core\language\util\LanguageTagUtils;
-use carbon\core\Listener;
 use carbon\core\log\Logger;
 use carbon\core\PluginManager;
 use carbon\core\RegistryHandler;
 use carbon\core\Router;
-use carbon\core\time\Profiler;
 use carbon\core\UserManager;
-use carbon\core\util\DateUtils;
 use carbon\core\util\IpUtils;
 
 // Prevent direct requests to this file due to security reasons

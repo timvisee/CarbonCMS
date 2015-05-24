@@ -1,5 +1,7 @@
 <?php
 
+// TODO: Remove this class, since the CORE shouldn't be instantiated itself.
+
 // TODO: Extend this class
 // TODO: Update PHP Docs in this class
 
