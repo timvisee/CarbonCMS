@@ -903,7 +903,7 @@ class DateTime extends PHPDateTime {
      *
      * @param int $hour The hour.
      *
-     * @return static|null A DateTime instance on success for method chaining.
+     * @return static A DateTime instance on success for method chaining.
      *
      * @throws InvalidTimeException Throws InvalidTimeException if the hour is invalid.
      */

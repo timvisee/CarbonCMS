@@ -345,6 +345,215 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(3, $dateTime->getSecond(), 'Failed to create a DateTime object with a time, wrong second');
     }
 
+    /**
+     * Test whether the getYear method works.
+     *
+     * @covers ::getYear
+     *
+     * @depends testCreateFromDateDates
+     */
+    public function testGetYear() {
+        // Create a DateTime instance with a specified year
+        $year = 2000;
+        $dateTime = DateTime::createFromDate($year, null, null);
+
+        // Assert the year
+        $this->assertEquals($year, $dateTime->getYear(), 'Failed to get the year of a DateTime instance');
+    }
+
+    /**
+     * Test whether the setYear method works.
+     *
+     * @covers ::setYear
+     *
+     * @depends testGetYear
+     */
+    public function testSetYear() {
+        // Create a DateTime object and set the year
+        $year = 2000;
+        $dateTime = DateTime::now()->setYear($year);
+
+        // Assert the year
+        $this->assertEquals($year, $dateTime->getYear(), 'Failed to set the year of a DateTime instance');
+    }
+
+    /**
+     * Test whether the getQuarter method works.
+     *
+     * @covers ::getQuarter
+     *
+     * @depends testCreateFromDateDates
+     */
+    public function testGetQuarter() {
+        // Create a DateTime object with the specified quarter
+        $month = 7;
+        $quarter = ceil($month / 3);
+        $dateTime = DateTime::createFromDate(null, $month, null);
+
+        // Assert the quarter
+        $this->assertEquals($quarter, $dateTime->getQuarter(), 'Failed to get the quarter of a DateTime instance with the current time');
+    }
+
+    /**
+     * Test whether the getMonth method works.
+     *
+     * @covers ::getMonth
+     *
+     * @depends testCreateFromDateDates
+     */
+    public function testGetMonth() {
+        // Create a DateTime instance with a specified month
+        $month = 6;
+        $dateTime = DateTime::createFromDate(null, $month, null);
+
+        // Assert the month
+        $this->assertEquals($month, $dateTime->getMonth(), 'Failed to get the month of a DateTime instance');
+    }
+
+    /**
+     * Test whether the setMonth method works.
+     *
+     * @covers ::setMonth
+     *
+     * @depends testGetMonth
+     */
+    public function testSetMonth() {
+        // Create a DateTime object and set the month
+        $month = 6;
+        $dateTime = DateTime::now()->setMonth($month);
+
+        // Assert the month
+        $this->assertEquals($month, $dateTime->getMonth(), 'Failed to set the month of a DateTime instance');
+    }
+
+    /**
+     * Test whether the getDay method works.
+     *
+     * @covers ::getDay
+     *
+     * @depends testCreateFromDateDates
+     */
+    public function testGetDay() {
+        // Create a DateTime instance with a specified day
+        $day = 15;
+        $dateTime = DateTime::createFromDate(null, null, $day);
+
+        // Assert the day
+        $this->assertEquals($day, $dateTime->getDay(), 'Failed to get the day of a DateTime instance');
+    }
+
+    /**
+     * Test whether the setDay method works.
+     *
+     * @covers ::setDay
+     *
+     * @depends testGetDay
+     */
+    public function testSetDay() {
+        // Create a DateTime object and set the day
+        $day = 15;
+        $dateTime = DateTime::now()->setDay($day);
+
+        // Assert the day
+        $this->assertEquals($day, $dateTime->getDay(), 'Failed to set the day of a DateTime instance');
+    }
+
+    /**
+     * Test whether the getHour method works.
+     *
+     * @covers ::getHour
+     *
+     * @depends testCreateFromTimeTimes
+     */
+    public function testGetHour() {
+        // Create a DateTime instance with a specified hour
+        $hour = 12;
+        $dateTime = DateTime::createFromTime($hour, null, null);
+
+        // Assert the hour
+        $this->assertEquals($hour, $dateTime->getHour(), 'Failed to get the hour of a DateTime instance');
+    }
+
+    /**
+     * Test whether the setHour method works.
+     *
+     * @covers ::setHour
+     *
+     * @depends testGetHour
+     */
+    public function testSetHour() {
+        // Create a DateTime object and set the hour
+        $hour = 12;
+        $dateTime = DateTime::now()->setHour($hour);
+
+        // Assert the hour
+        $this->assertEquals($hour, $dateTime->getHour(), 'Failed to set the hour of a DateTime instance');
+    }
+
+    /**
+     * Test whether the getMinute method works.
+     *
+     * @covers ::getMinute
+     *
+     * @depends testCreateFromTimeTimes
+     */
+    public function testGetMinute() {
+        // Create a DateTime instance with a specified minute
+        $minute = 30;
+        $dateTime = DateTime::createFromTime(null, $minute, null);
+
+        // Assert the minute
+        $this->assertEquals($minute, $dateTime->getMinute(), 'Failed to get the minute of a DateTime instance');
+    }
+
+    /**
+     * Test whether the setMinute method works.
+     *
+     * @covers ::setMinute
+     *
+     * @depends testGetMinute
+     */
+    public function testSetMinute() {
+        // Create a DateTime object and set the minute
+        $minute = 30;
+        $dateTime = DateTime::now()->setMinute($minute);
+
+        // Assert the minute
+        $this->assertEquals($minute, $dateTime->getMinute(), 'Failed to set the minute of a DateTime instance');
+    }
+
+    /**
+     * Test whether the getSecond method works.
+     *
+     * @covers ::getSecond
+     *
+     * @depends testCreateFromTimeTimes
+     */
+    public function testGetSecond() {
+        // Create a DateTime instance with a specified second
+        $second = 30;
+        $dateTime = DateTime::createFromTime(null, null, $second);
+
+        // Assert the second
+        $this->assertEquals($second, $dateTime->getSecond(), 'Failed to get the second of a DateTime instance');
+    }
+
+    /**
+     * Test whether the setSecond method works.
+     *
+     * @covers ::setSecond
+     *
+     * @depends testGetSecond
+     */
+    public function testSetSecond() {
+        // Create a DateTime object and set the second
+        $second = 30;
+        $dateTime = DateTime::now()->setSecond($second);
+
+        // Assert the second
+        $this->assertEquals($second, $dateTime->getSecond(), 'Failed to set the second of a DateTime instance');
+    }
+
 
 
     // TODO: Update the methods below
@@ -447,225 +656,6 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
     }
 
     // TODO: Test method for __get, __isset, __set here!
-
-    /**
-     * Test whether the getYear method works.
-     *
-     * @covers ::getYear
-     */
-    public function testGetYear() {
-        // Test the method with the current year
-        $dateTime = DateTime::now();
-        $dateTimeYear = $dateTime->getYear();
-        $phpYear = (int) date("Y");
-        $this->assertEquals($phpYear, $dateTimeYear, 'Failed to get the year of a DateTime instance with the current time');
-
-        // Test the method with a specified year
-        $year = 2000;
-        $dateTime = DateTime::createFromDate($year, null, null);
-        $dateTimeYear = $dateTime->getYear();
-        $this->assertEquals($year, $dateTimeYear, 'Failed to get the year of a DateTime instance with a specified year');
-    }
-
-    /**
-     * Test whether the setYear method works.
-     *
-     * @covers ::setYear
-     */
-    public function testSetYear() {
-        // Set a specified year
-        $year = 2000;
-        $dateTime = DateTime::now();
-        $dateTime->setYear($year);
-        $dateTimeYear = $dateTime->getYear();
-        $this->assertEquals($year, $dateTimeYear, 'Failed to set the year of a DateTime instance');
-    }
-
-    /**
-     * Test whether the getQuarter method works.
-     *
-     * @covers ::getQuarter
-     */
-    public function testGetQuarter() {
-        // Test the method with the current month
-        $dateTime = DateTime::now();
-        $dateTimeQuarter = $dateTime->getQuarter();
-        $phpMonth = (int) date("m");
-        $phpQuarter = ceil($phpMonth / 3);
-        $this->assertEquals($phpQuarter, $dateTimeQuarter, 'Failed to get the quarter of a DateTime instance with the current time');
-
-        // Test the method with a specified month
-        $month = 6;
-        $quarter = ceil($month / 3);
-        $dateTime = DateTime::createFromDate(null, $month, null);
-        $dateTimeQuarter = $dateTime->getQuarter();
-        $this->assertEquals($quarter, $dateTimeQuarter, 'Failed to get the quarter of a DateTime instance with the current time');
-    }
-
-    /**
-     * Test whether the getMonth method works.
-     *
-     * @covers ::getMonth
-     */
-    public function testGetMonth() {
-        // Test the method with the current month
-        $dateTime = DateTime::now();
-        $dateTimeMonth = $dateTime->getMonth();
-        $phpMonth = (int) date("m");
-        $this->assertEquals($phpMonth, $dateTimeMonth, 'Failed to get the month of a DateTime instance with the current time');
-
-        // Test the method with a specified month
-        $month = 6;
-        $dateTime = DateTime::createFromDate(null, $month, null);
-        $dateTimeMonth = $dateTime->getMonth();
-        $this->assertEquals($month, $dateTimeMonth, 'Failed to get the month of a DateTime instance with a specified month');
-    }
-
-    /**
-     * Test whether the setMonth method works.
-     *
-     * @covers ::setMonth
-     */
-    public function testSetMonth() {
-        // Set a specified month
-        $month = 6;
-        $dateTime = DateTime::now();
-        $dateTime->setMonth($month);
-        $dateTimeMonth = $dateTime->getMonth();
-        $this->assertEquals($month, $dateTimeMonth, 'Failed to set the month of a DateTime instance');
-    }
-
-    /**
-     * Test whether the getDay method works.
-     *
-     * @covers ::getDay
-     */
-    public function testGetDay() {
-        // Test the method with the current day
-        $dateTime = DateTime::now();
-        $dateTimeDay = $dateTime->getDay();
-        $phpDay = (int) date("d");
-        $this->assertEquals($phpDay, $dateTimeDay, 'Failed to get the day of a DateTime instance with the current time');
-
-        // Test the method with a specified day
-        $day = 15;
-        $dateTime = DateTime::createFromDate(null, null, $day);
-        $dateTimeDay = $dateTime->getDay();
-        $this->assertEquals($day, $dateTimeDay, 'Failed to get the day of a DateTime instance with a specified day');
-    }
-
-    /**
-     * Test whether the setDay method works.
-     *
-     * @covers ::setDay
-     */
-    public function testSetDay() {
-        // Set a specified day
-        $day = 15;
-        $dateTime = DateTime::now();
-        $dateTime->setDay($day);
-        $dateTimeDay = $dateTime->getDay();
-        $this->assertEquals($day, $dateTimeDay, 'Failed to set the day of a DateTime instance');
-    }
-
-    /**
-     * Test whether the getHour method works.
-     *
-     * @covers ::getHour
-     */
-    public function testGetHour() {
-        // Test the method with the current hour
-        $dateTime = DateTime::now();
-        $dateTimeHour = $dateTime->getHour();
-        $phpHour = (int) date("H");
-        $this->assertEquals($phpHour, $dateTimeHour, 'Failed to get the hour of a DateTime instance with the current time');
-
-        // Test the method with a specified hour
-        $hour = 12;
-        $dateTime = DateTime::createFromTime($hour, null, null);
-        $dateTimeHour = $dateTime->getHour();
-        $this->assertEquals($hour, $dateTimeHour, 'Failed to get the hour of a DateTime instance with a specified hour');
-    }
-
-    /**
-     * Test whether the setHour method works.
-     *
-     * @covers ::setHour
-     */
-    public function testSetHour() {
-        // Set a specified hour
-        $hour = 12;
-        $dateTime = DateTime::now();
-        $dateTime->setHour($hour);
-        $dateTimeHour = $dateTime->getHour();
-        $this->assertEquals($hour, $dateTimeHour, 'Failed to set the hour of a DateTime instance');
-    }
-
-    /**
-     * Test whether the getMinute method works.
-     *
-     * @covers ::getMinute
-     */
-    public function testGetMinute() {
-        // Test the method with the current minute
-        $dateTime = DateTime::now();
-        $dateTimeMinute = $dateTime->getMinute();
-        $phpMinute = (int) date("i");
-        $this->assertEquals($phpMinute, $dateTimeMinute, 'Failed to get the minute of a DateTime instance with the current time');
-
-        // Test the method with a specified minute
-        $minute = 30;
-        $dateTime = DateTime::createFromTime(null, $minute, null);
-        $dateTimeMinute = $dateTime->getMinute();
-        $this->assertEquals($minute, $dateTimeMinute, 'Failed to get the minute of a DateTime instance with a specified minute');
-    }
-
-    /**
-     * Test whether the setMinute method works.
-     *
-     * @covers ::setMinute
-     */
-    public function testSetMinute() {
-        // Set a specified minute
-        $minute = 30;
-        $dateTime = DateTime::now();
-        $dateTime->setMinute($minute);
-        $dateTimeMinute = $dateTime->getMinute();
-        $this->assertEquals($minute, $dateTimeMinute, 'Failed to set the minute of a DateTime instance');
-    }
-
-    /**
-     * Test whether the getSecond method works.
-     *
-     * @covers ::getSecond
-     */
-    public function testGetSecond() {
-        // Test the method with the current second
-        $dateTime = DateTime::now();
-        $dateTimeSecond = $dateTime->getSecond();
-        $phpSecond = (int) date("s");
-        $this->assertEquals($phpSecond, $dateTimeSecond, 'Failed to get the second of a DateTime instance with the current time');
-
-        // Test the method with a specified second
-        $second = 30;
-        $dateTime = DateTime::createFromTime(null, null, $second);
-        $dateTimeSecond = $dateTime->getSecond();
-        $this->assertEquals($second, $dateTimeSecond, 'Failed to get the second of a DateTime instance with a specified second');
-    }
-
-    /**
-     * Test whether the setSecond method works.
-     *
-     * @covers ::setSecond
-     */
-    public function testSetSecond() {
-        // Set a specified second
-        $second = 30;
-        $dateTime = DateTime::now();
-        $dateTime->setSecond($second);
-        $dateTimeSecond = $dateTime->getSecond();
-        $this->assertEquals($second, $dateTimeSecond, 'Failed to set the second of a DateTime instance');
-    }
 
     /**
      * Test whether the setTimestamp method works.
