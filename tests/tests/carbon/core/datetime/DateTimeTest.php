@@ -181,6 +181,7 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
      *
      * @depends testConstructorPHPDateTime
      */
+    // TODO: Depend the diffInSeconds() test
     public function testConstructorNow() {
         // Create a base date and time using PHPs DateTime object
         $baseDateTime = new DateTime(new PHPDateTime('now'));
@@ -200,32 +201,55 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
         $this->lessThanOrEqual(3, $baseDateTime->diffInSeconds($dateTime, true), 'Failed to construct a DateTime object with null, time difference too big');
     }
 
-    // TODO: Update the methods below
-
     /**
-     * Test whether the create method works.
+     * Test the create method using null values, or no parameters.
      *
      * @covers ::create
      */
-    // TODO: Add a timezone checks!
-    public function testCreate() {
-        // Create with null values
+    // TODO: Depend the diffInSeconds() and now() test
+    // TODO: Add timezone check
+    public function testCreateNull() {
+        // Create a DateTime object with null values
         $dateTime = DateTime::create();
         $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to create a DateTime object, wrong object type');
-        $this->assertEquals(DateTime::now()->format(DateTime::DEFAULT_FORMAT_DATE), $dateTime->format(DateTime::DEFAULT_FORMAT_DATE), 'Failed to create a DateTime object, wrong date');
-        $this->assertEquals(DateTimeUtils::getHour(), $dateTime->getHour(), 'Failed to create a DateTime object, wrong hour');
 
-        // Create with a specified hour
+        // Make sure the date and time object doesn't differ more than 3 seconds with the current time
+        $this->lessThanOrEqual(3, DateTime::now()->diffInSeconds($dateTime, true), 'Failed to create a DateTime object with null, time difference too big');
+    }
+
+    /**
+     * Test the create method with a specified hour.
+     *
+     * @covers ::create
+     */
+    // TODO: Depend the now() test
+    // TODO: Add timezone check
+    public function testCreateHour() {
+        // Create a DateTime object with a specified hour
         $dateTime = DateTime::create(null, null, null, 1);
+        $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to create a DateTime object, wrong object type');
+
+        // Assert the date and time
         $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to create a DateTime object, wrong object type');
         $this->assertEquals(DateTime::now()->format(DateTime::DEFAULT_FORMAT_DATE), $dateTime->format(DateTime::DEFAULT_FORMAT_DATE), 'Failed to create a DateTime object, wrong date');
         $this->assertEquals(1, $dateTime->getHour(), 'Failed to create a DateTime object, wrong hour');
         $this->assertEquals(0, $dateTime->getMinute(), 'Failed to create a DateTime object, wrong minute');
         $this->assertEquals(0, $dateTime->getSecond(), 'Failed to create a DateTime object, wrong second');
+    }
 
-        // Create with a specified value for each property
+    /**
+     * Test whether the create method works with specified date and time values.
+     *
+     * @covers ::create
+     */
+    // TODO: Depend the now() test
+    // TODO: Add timezone check
+    public function testCreateDatesTimes() {
+        // Create a DateTime object with specified values
         $dateTime = DateTime::create(1, 2, 3, 4, 5, 6);
         $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to create a DateTime object, wrong object type');
+
+        // Assert the date and time
         $this->assertEquals(1, $dateTime->getYear(), 'Failed to create a DateTime object, wrong year');
         $this->assertEquals(2, $dateTime->getMonth(), 'Failed to create a DateTime object, wrong month');
         $this->assertEquals(3, $dateTime->getDay(), 'Failed to create a DateTime object, wrong day');
@@ -233,6 +257,8 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(5, $dateTime->getMinute(), 'Failed to create a DateTime object, wrong minute');
         $this->assertEquals(6, $dateTime->getSecond(), 'Failed to create a DateTime object, wrong second');
     }
+
+    // TODO: Update the methods below
 
     /**
      * Test whether the createFromDate method works.
