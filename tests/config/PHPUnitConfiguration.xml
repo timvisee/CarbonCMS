@@ -1,0 +1,57 @@
+<!--
+PHPUnitConfiguration.xml
+
+The PHP Unit test configuration for Carbon CORE & CMS.
+-->
+
+<phpunit
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.6/phpunit.xsd"
+        backupGlobals="true"
+        backupStaticAttributes="false"
+        bootstrap="../tests/bootstrap.php"
+        cacheTokens="false"
+        colors="false"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        forceCoversAnnotation="true"
+        mapTestClassNameToCoveredClassName="false"
+        processIsolation="false"
+        stopOnError="false"
+        stopOnFailure="false"
+        stopOnIncomplete="false"
+        stopOnSkipped="false"
+        timeoutForSmallTests="5"
+        timeoutForMediumTests="10"
+        timeoutForLargeTests="60"
+        verbose="false">
+
+    <php>
+        <!-- Enable the test mode for Carbon CORE -->
+        <const name="CARBON_CORE_TEST" value="true" />
+        <!-- Enable the test mode for Carbon CMS -->
+        <const name="CARBON_CMS_TEST" value="true" />
+    </php>
+
+    <testsuites>
+        <!-- Test suite for Carbon CORE -->
+        <testsuite name="Carbon CORE Test Suite">
+            <directory phpVersion="5.3.1" phpVersionOperator=">=">../tests/carbon/core</directory>
+        </testsuite>
+
+        <!-- Test suite for Carbon CMS -->
+        <testsuite name="Carbon CMS Test Suite">
+            <directory phpVersion="5.3.1" phpVersionOperator=">=">../tests/carbon/cms</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
+
+<!--
+TODO: Should we keep these properties?
+
+printerClass="PHPUnit_TextUI_ResultPrinter"
+printerFile="/path/to/ResultPrinter.php"
+testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader"
+testSuiteLoaderFile="/path/to/StandardTestSuiteLoader.php"
+-->
