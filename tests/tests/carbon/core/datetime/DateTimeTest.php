@@ -781,7 +781,7 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
     /**
      * Test whether the getOffset method works with the UTC timezone.
      *
-     * @covers ::setTimezone
+     * @covers ::getOffset
      */
     // TODO: Depends now().
     public function testGetOffsetUTC() {
@@ -798,7 +798,7 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
     /**
      * Test whether the getOffset method works with a timezone that has a variable offset.
      *
-     * @covers ::setTimezone
+     * @covers ::getOffset
      */
     // TODO: Depends now().
     public function testGetOffsetVariable() {
@@ -816,7 +816,7 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
     /**
      * Test whether the getOffset method works with a timezone that has a fixed offset.
      *
-     * @covers ::setTimezone
+     * @covers ::getOffset
      */
     // TODO: Depends now().
     public function testGetOffsetFixed() {
@@ -828,6 +828,58 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
 
         // Assert the offset in seconds
         $this->assertEquals(-10 * 60 * 60, $dateTime->getOffset(), 'Failed to get the proper offset of a DateTime object');
+    }
+
+    /**
+     * Test whether the getOffset method works with the UTC timezone.
+     *
+     * @covers ::getOffsetHours
+     */
+    // TODO: Depends now().
+    public function testGetOffsetHoursUTC() {
+        // Specify the timezone to use
+        $timezone = 'UTC';
+
+        // Create a DateTime object with the specified timezone
+        $dateTime = DateTime::now($timezone);
+
+        // Assert the offset in hours
+        $this->assertEquals(0, $dateTime->getOffsetHours(), 'Failed to get the offset in hours of a UTC DateTime object');
+    }
+
+    /**
+     * Test whether the getOffset method works with a timezone that has a variable offset.
+     *
+     * @covers ::getOffsetHours
+     */
+    // TODO: Depends now().
+    public function testGetOffsetHoursVariable() {
+        // Specify the timezone to use
+        $timezone = 'Europe/Amsterdam';
+
+        // Create a DateTime object with the specified timezone
+        $dateTime = DateTime::now($timezone);
+
+        // Assert the offset in hours
+        $this->assertGreaterThanOrEqual(1, $dateTime->getOffsetHours(), 'Failed to get the proper offset in hours of a DateTime object');
+        $this->assertLessThanOrEqual(2, $dateTime->getOffsetHours(), 'Failed to get the proper offset in hours of a DateTime object');
+    }
+
+    /**
+     * Test whether the getOffset method works with a timezone that has a fixed offset.
+     *
+     * @covers ::getOffsetHours
+     */
+    // TODO: Depends now().
+    public function testGetOffsetHoursFixed() {
+        // Specify the timezone to use
+        $timezone = 'Pacific/Honolulu';
+
+        // Create a DateTime object with the specified timezone
+        $dateTime = DateTime::now($timezone);
+
+        // Assert the offset in hours
+        $this->assertEquals(-10, $dateTime->getOffsetHours(), 'Failed to get the proper offset in hours of a DateTime object');
     }
 
 
@@ -933,31 +985,6 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
     }
 
     // TODO: Test method for __get, __isset, __set here!
-
-    /**
-     * Test whether the getOffsetHours method works.
-     *
-     * @covers ::getOffsetHours
-     */
-    public function testGetOffsetHours() {
-        // Test the UTC timezone offset
-        $timezone = 'UTC';
-        $dateTime = DateTime::now($timezone);
-        $dateTimeOffset = $dateTime->getOffsetHours();
-        $this->assertEquals(0, $dateTimeOffset, 'Failed to get the offset of a UTC DateTime object');
-
-        // Test a timezone with a variable offset
-        $timezone = 'Europe/Amsterdam';
-        $dateTime = DateTime::now($timezone);
-        $dateTimeOffset = $dateTime->getOffsetHours();
-        $this->assertGreaterThan(0, $dateTimeOffset, 'Failed to get the proper offset of a DateTime object');
-
-        // Test a timezone with a fixed offset
-        $timezone = 'Pacific/Honolulu';
-        $dateTime = DateTime::now($timezone);
-        $dateTimeOffset = $dateTime->getOffsetHours();
-        $this->assertEquals(-10, $dateTimeOffset, 'Failed to get the proper offset of a DateTime object');
-    }
 
     /**
      * Test whether the getMockNow method works.
