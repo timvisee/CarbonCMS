@@ -607,7 +607,7 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * Test whether the getTimezone method works.
+     * Test whether the getTimezone method works with a default timezone.
      *
      * @covers ::getTimezone
      */
@@ -628,7 +628,7 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * Test whether the getTimezone method works.
+     * Test whether the getTimezone method works with a non-default timezone.
      *
      * @covers ::getTimezone
      */
@@ -647,6 +647,137 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
         $dateTimeTimezone = $dateTimeTimezone->getName();
         $this->assertEquals($timezone, $dateTimeTimezone, 'Failed to get the timezone of a DateTime instance, the timezone names are different');
     }
+
+    /**
+     * Test whether the setTimezone method works with a DateTimeZone object.
+     *
+     * @covers ::setTimezone
+     *
+     * @depends testGetTimezoneNonDefault
+     */
+    // TODO: Depend on the DateTimeZone::parse method?
+    public function testSetTimezoneDateTimeZone() {
+        // Specify the timezone, and create a DateTimeZone object
+        $timezoneId = self::getNonDefaultTimezone();
+        $timezone = DateTimeZone::parse($timezoneId);
+        $this->assertInstanceOf(self::OBJECT_DATETIMEZONE, $timezone, 'Failed to parse a DateTimeZone instance used for testing');
+
+        // Create a DateTime object and set the timezone
+        $dateTime = DateTime::now();
+        $dateTime->setTimezone($timezone);
+
+        // Assert the timezones
+        $this->assertEquals($timezoneId, $dateTime->getTimezone()->getName(), 'Failed to set the timezone with a DateTimeZone instance of a DateTime instance');
+    }
+
+    /**
+     * Test whether the setTimezone method works with a PHPDateTimeZone object.
+     *
+     * @covers ::setTimezone
+     *
+     * @depends testSetTimezoneDateTimeZone
+     */
+    public function testSetTimezonePHPDateTimeZone() {
+        // Specify the timezone, and create a DateTimeZone object
+        $timezoneId = self::getNonDefaultTimezone();
+        $timezone = new PHPDateTimeZone($timezoneId);
+        $this->assertInstanceOf('DateTimeZone', $timezone, 'Failed to parse a DateTimeZone instance used for testing');
+
+        // Create a DateTime object and set the timezone
+        $dateTime = DateTime::now();
+        $dateTime->setTimezone($timezone);
+
+        // Assert the timezones
+        $this->assertEquals($timezoneId, $dateTime->getTimezone()->getName(), 'Failed to set the timezone with a PHPDateTimeZone instance');
+    }
+
+    /**
+     * Test whether the setTimezone method works with a timezone identifier as a string.
+     *
+     * @covers ::setTimezone
+     *
+     * @depends testGetTimezoneNonDefault
+     */
+    public function testSetTimezoneTimezoneIdentifier() {
+        // Specify the timezone
+        $timezone = self::getNonDefaultTimezone();
+
+        // Create a DateTime object and set the timezone
+        $dateTime = DateTime::now();
+        $dateTime->setTimezone($timezone);
+
+        // Assert the timezones
+        $this->assertEquals($timezone, $dateTime->getTimezone()->getName(), 'Failed to set the timezone with a timezone identifier as a string');
+    }
+
+    /**
+     * Test whether the setTimezone method works with a DateTime object.
+     *
+     * @covers ::setTimezone
+     *
+     * @depends testConstructorNow
+     * @depends testGetTimezoneNonDefault
+     */
+    public function testSetTimezoneDateTime() {
+        // Specify the timezone
+        $timezone = self::getNonDefaultTimezone();
+
+        // Create a DateTime object with the specified timezone
+        $baseDateTime = new DateTime(null, $timezone);
+        $this->assertInstanceOf(self::OBJECT_DATETIME, $baseDateTime, 'Failed to create a DateTime object, used for testing');
+
+        // Create a DateTime object and set the timezone with the base object
+        $dateTime = DateTime::now();
+        $dateTime->setTimezone($baseDateTime);
+
+        // Assert the timezones
+        $this->assertEquals($timezone, $dateTime->getTimezone()->getName(), 'Failed to set the timezone with a DateTime instance');
+    }
+
+    /**
+     * Test whether the setTimezone method works with a PHPDateTime object.
+     *
+     * @covers ::setTimezone
+     *
+     * @depends testGetTimezoneNonDefault
+     */
+    public function testSetTimezonePHPDateTime() {
+        // Specify the timezone
+        $timezone = self::getNonDefaultTimezone();
+
+        // Create a DateTime object with the specified timezone
+        $baseDateTime = new PHPDateTime('now', new PHPDateTimeZone($timezone));
+        $this->assertInstanceOf('DateTime', $baseDateTime, 'Failed to create a PHPDateTime object, used for testing');
+
+        // Create a DateTime object and set the timezone with the base object
+        $dateTime = DateTime::now();
+        $dateTime->setTimezone($baseDateTime);
+
+        // Assert the timezones
+        $this->assertEquals($timezone, $dateTime->getTimezone()->getName(), 'Failed to set the timezone with a PHPDateTime instance');
+    }
+
+    /**
+     * Test whether the setTimezone method works with a null property to set the timezone to the default.
+     *
+     * @covers ::setTimezone
+     *
+     * @depends testGetTimezoneNonDefault
+     */
+    // TODO: Depends now().
+    public function testSetTimezoneDefault() {
+        // Specify the timezone
+        $nonDefaultTimezone = self::getNonDefaultTimezone();
+        $defaultTimezone = self::getDefaultTimezone();
+
+        // Create a DateTime object with the non default timezone, and set it to the default using null
+        $dateTime = DateTime::now($nonDefaultTimezone);
+        $dateTime->setTimezone(null);
+
+        // Assert the timezone
+        $this->assertEquals($defaultTimezone, $dateTime->getTimezone()->getName(), 'Failed to set the default timezone using null');
+    }
+
 
 
 
@@ -750,79 +881,6 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
     }
 
     // TODO: Test method for __get, __isset, __set here!
-
-    /**
-     * Test whether the setTimezone method works.
-     *
-     * @covers ::setTimezone
-     */
-    public function testSetTimezone() {
-        // TODO: Are all these tests required when the ::parse method is used on the DateTimeZone object?
-        // Test a DateTimeZone instance
-        $timezoneId = self::getNonDefaultTimezone();
-        $dateTimeZone = DateTimeZone::parse($timezoneId);
-        $this->assertInstanceOf(self::OBJECT_DATETIMEZONE, $dateTimeZone, 'Failed to parse a DateTimeZone instance used for testing');
-        $dateTime = DateTime::now();
-        $dateTime->setTimezone($dateTimeZone);
-        $dateTimeTimezone = $dateTime->getTimezone();
-        $this->assertInstanceOf(self::OBJECT_DATETIMEZONE, $dateTimeTimezone, 'Failed to set the timezone with a DateTimeZone instance of a DateTime instance');
-        $dateTimeTimezone = $dateTimeTimezone->getName();
-        $this->assertEquals($timezoneId, $dateTimeTimezone, 'Failed to set the timezone with a DateTimeZone instance of a DateTime instance');
-
-        // Test a PHPDateTimeZone instance
-        $timezoneId = self::getNonDefaultTimezone();
-        $dateTimeZone = new PHPDateTimeZone($timezoneId);
-        $this->assertInstanceOf('DateTimeZone', $dateTimeZone, 'Failed to parse a DateTimeZone instance used for testing');
-        $dateTime = DateTime::now();
-        $dateTime->setTimezone($dateTimeZone);
-        $dateTimeTimezone = $dateTime->getTimezone();
-        $this->assertInstanceOf(self::OBJECT_DATETIMEZONE, $dateTimeTimezone, 'Failed to set the timezone with a DateTimeZone instance of a DateTime instance');
-        $dateTimeTimezone = $dateTimeTimezone->getName();
-        $this->assertEquals($timezoneId, $dateTimeTimezone, 'Failed to set the timezone with a DateTimeZone instance of a DateTime instance');
-
-        // Test a specified timezone identifier (string)
-        $timezoneId = self::getNonDefaultTimezone();
-        $dateTime = DateTime::now();
-        $dateTime->setTimezone($timezoneId);
-        $dateTimeTimezone = $dateTime->getTimezone();
-        $this->assertInstanceOf(self::OBJECT_DATETIMEZONE, $dateTimeTimezone, 'Failed to set the timezone with an identifier of a DateTime instance');
-        $dateTimeTimezone = $dateTimeTimezone->getName();
-        $this->assertEquals($timezoneId, $dateTimeTimezone, 'Failed to set the timezone with an identifier of a DateTime instance');
-
-        // Test a timezone specified a DateTime object
-        $timezoneId = self::getNonDefaultTimezone();
-        $dateTimeWithTimezone = DateTime::now($timezoneId);
-        $dateTimeZone = DateTimeZone::parse($dateTimeWithTimezone);
-        $this->assertInstanceOf(self::OBJECT_DATETIMEZONE, $dateTimeZone, 'Failed to parse a DateTime to a DateTimeZone instance, used for testing');
-        $dateTime = DateTime::now();
-        $dateTime->setTimezone($dateTimeZone);
-        $dateTimeTimezone = $dateTime->getTimezone();
-        $this->assertInstanceOf(self::OBJECT_DATETIMEZONE, $dateTimeTimezone, 'Failed to set the timezone with a DateTimeZone instance of a DateTime instance');
-        $dateTimeTimezone = $dateTimeTimezone->getName();
-        $this->assertEquals($timezoneId, $dateTimeTimezone, 'Failed to set the timezone with a DateTimeZone instance of a DateTime instance');
-
-        // Test a timezone specified a PHPDateTime object
-        $timezoneId = self::getNonDefaultTimezone();
-        $timezone = new PHPDateTimeZone($timezoneId);
-        $dateTimeWithTimezone = new PHPDateTime('now', $timezone);
-        $dateTimeZone = DateTimeZone::parse($dateTimeWithTimezone);
-        $this->assertInstanceOf(self::OBJECT_DATETIMEZONE, $dateTimeZone, 'Failed to parse a DateTime to a DateTimeZone instance, used for testing');
-        $dateTime = DateTime::now();
-        $dateTime->setTimezone($dateTimeZone);
-        $dateTimeTimezone = $dateTime->getTimezone();
-        $this->assertInstanceOf(self::OBJECT_DATETIMEZONE, $dateTimeTimezone, 'Failed to set the timezone with a DateTimeZone instance of a DateTime instance');
-        $dateTimeTimezone = $dateTimeTimezone->getName();
-        $this->assertEquals($timezoneId, $dateTimeTimezone, 'Failed to set the timezone with a DateTimeZone instance of a DateTime instance');
-
-        // Test the default timezone using null
-        $defaultTimezoneId = self::getDefaultTimezone();
-        $dateTime = DateTime::now();
-        $dateTime->setTimezone(null);
-        $dateTimeTimezone = $dateTime->getTimezone();
-        $this->assertInstanceOf(self::OBJECT_DATETIMEZONE, $dateTimeTimezone, 'Failed to set the default timezone using null of a DateTime instance');
-        $dateTimeTimezone = $dateTimeTimezone->getName();
-        $this->assertEquals($defaultTimezoneId, $dateTimeTimezone, 'Failed to set the default timezone using null of a DateTime instance');
-    }
 
     /**
      * Test whether the getOffset method works.
