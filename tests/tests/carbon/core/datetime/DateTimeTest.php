@@ -910,6 +910,30 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($mockDateTime->equals($mock), 'The mock date and time is different than specified');
     }
 
+    /**
+     * Test whether the hasMockNow method works with the default mock date and time.
+     *
+     * @covers ::hasMockNow
+     */
+    public function testHasMockNowDefault() {
+        // Make sure there isn't any mock date and time
+        $this->assertFalse(DateTime::hasMockNow(), 'Failed to check whether there\'s any mock date and time set');
+    }
+
+    /**
+     * Test whether the hasMockNow method works with a specified mock date and time.
+     *
+     * @covers ::hasMockNow
+     */
+    // TODO: Depends on setMockNow() and now().
+    public function testHasMockNowSet() {
+        // Set the mock date and time
+        DateTime::setMockNow(DateTime::now());
+
+        // Assert the mock date and time
+        $this->assertTrue(DateTime::hasMockNow(), 'Failed to check whether there\'s any mock date and time set');
+    }
+
 
 
 
@@ -1014,22 +1038,6 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
 
     // TODO: Test method for __get, __isset, __set here!
 
-
-    /**
-     * Test whether the hasMockNow method works.
-     *
-     * @covers ::hasMockNow
-     */
-    public function testHasMockNow() {
-        // Make sure there isn't any mock date and time
-        $this->assertFalse(DateTime::hasMockNow(), 'Failed to check whether there\'s any mock date and time set');
-
-        // Set the mock date and time
-        DateTime::setMockNow(DateTime::now());
-
-        // Make sure there's a mock date and time set
-        $this->assertTrue(DateTime::hasMockNow(), 'Failed to check whether there\'s any mock date and time set');
-    }
 
     /**
      * Test whether the setMockNow method works.
