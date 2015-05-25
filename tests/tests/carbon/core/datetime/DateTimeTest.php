@@ -346,6 +346,137 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
+     * Test the parse method with a DateTime object.
+     *
+     * @covers ::parse
+     *
+     * @depends testGetTimezoneNonDefault
+     */
+    // TODO: Depends createTomorrow()
+    public function testParseDateTime() {
+        // Create a DateTime instance and specify the default and non-default timezone
+        $nonDefaultTimezone = self::getNonDefaultTimezone();
+        $defaultTimezone = self::getDefaultTimezone();
+        $baseDateTime = DateTime::createTomorrow($nonDefaultTimezone);
+
+        // Parse the DateTime object
+        $dateTime = DateTime::parse($baseDateTime, $defaultTimezone);
+        $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to parse a DateTime object, wrong object type');
+
+        // Assert the DateTime object
+        $this->assertTrue($baseDateTime->equals($dateTime), 'Failed to parse a DateTime instance');
+        $this->assertEquals($nonDefaultTimezone, $dateTime->getTimezone()->getName(), 'Failed to parse a DateTime instance');
+    }
+
+    /**
+     * Test the parse method with a PHPDateTime object.
+     *
+     * @covers ::parse
+     *
+     * @depends testGetTimezoneNonDefault
+     */
+    public function testParsePHPDateTime() {
+        // Create a DateTime instance and specify the default and non-default timezone
+        $nonDefaultTimezone = self::getNonDefaultTimezone();
+        $defaultTimezone = self::getDefaultTimezone();
+        $baseDateTime = new PHPDateTime('+1 day', new PHPDateTimeZone($nonDefaultTimezone));
+        $this->assertInstanceOf('DateTime', $baseDateTime, 'Failed to construct a PHPDateTime object');
+
+        // Parse the DateTime object
+        $dateTime = DateTime::parse($baseDateTime, $defaultTimezone);
+        $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to parse a PHPDateTime object as DateTime object, wrong object type');
+
+        // Assert the DateTime object
+        $this->assertEquals($baseDateTime, $dateTime, 'Failed to parse a DateTime instance');
+        $this->assertEquals($nonDefaultTimezone, $dateTime->getTimezone()->getName(), 'Failed to parse a DateTime instance');
+    }
+
+    /**
+     * Test the parse method with a positive timestamp.
+     *
+     * @covers ::parse
+     *
+     * @depends testGetTimezoneNonDefault
+     */
+    public function testParseTimestampPositive() {
+        // Specify the timestamp and timezone
+        $timestamp = 1234567890;
+        $timezone = self::getNonDefaultTimezone();
+
+        // Parse the timestamp
+        $dateTime = DateTime::parse($timestamp, $timezone);
+        $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to parse a timestamp as DateTime object, wrong object type');
+
+        // Assert the DateTime object
+        $this->assertEquals($timestamp, $dateTime->getTimestamp(), 'Failed to parse the timestamp as DateTime object');
+        $this->assertEquals($timezone, $dateTime->getTimezone()->getName(), 'Failed to parse the timestamp as DateTime object with a specified timezone');
+    }
+
+    /**
+     * Test the parse method with a negative timestamp.
+     *
+     * @covers ::parse
+     *
+     * @depends testGetTimezoneNonDefault
+     * @depends testParseTimestampPositive
+     */
+    public function testParseTimestampNegative() {
+        // Specify the timestamp and timezone
+        $timestamp = -1234567890;
+        $timezone = self::getNonDefaultTimezone();
+
+        // Parse the timestamp
+        $dateTime = DateTime::parse($timestamp, $timezone);
+        $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to parse a timestamp as DateTime object, wrong object type');
+
+        // Assert the DateTime object
+        $this->assertEquals($timestamp, $dateTime->getTimestamp(), 'Failed to parse the timestamp as DateTime object');
+        $this->assertEquals($timezone, $dateTime->getTimezone()->getName(), 'Failed to parse the timestamp as DateTime object with a specified timezone');
+    }
+
+    /**
+     * Test the parse method with a relative date and time.
+     *
+     * @covers ::parse
+     *
+     * @depends testParsePHPDateTime
+     * @depends testGetTimezoneNonDefault
+     */
+    public function testParseRelativeDateTime() {
+        // Test each specified relative date and time
+        foreach(static::$TEST_RELATIVE_DATE_TIMES as $relativeDateTime) {
+            // Create a base date and time object
+            $baseDateTime = DateTime::parse(new PHPDateTime($relativeDateTime));
+
+            // Parse the relative date and time
+            $dateTime = DateTime::parse($relativeDateTime);
+
+            // Assert the date and time
+            $this->assertTrue($baseDateTime->equals($dateTime), 'Failed to parse a relative date and time of \'' . $relativeDateTime . '\'');
+        }
+    }
+
+    /**
+     * Test the parse method with a null parameter.
+     *
+     * @covers ::parse
+     *
+     * @depends testGetTimezoneNonDefault
+     */
+    // TODO: Depends now() and diffInSeconds().
+    public function testParseNull() {
+        // Specify a timezone
+        $timezone = self::getNonDefaultTimezone();
+
+        // Parse null with a timezone
+        $dateTime = DateTime::parse(null, $timezone);
+        $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to parse null as DateTime object, wrong object type');
+
+        // Make sure the date and time object doesn't differ more than 2 seconds with the current time
+        $this->lessThanOrEqual(2, DateTime::now()->diffInSeconds($dateTime, true), 'Failed to create a DateTime object with null, time difference too big');
+    }
+
+    /**
      * Test whether the getYear method works.
      *
      * @covers ::getYear
@@ -969,108 +1100,6 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
 
         // Get and assert the mock date and time
         $this->assertNull(DateTime::getMockNow(), 'Failed to set the mock date and time with null');
-    }
-
-
-
-
-    // TODO: Update the methods below
-
-    /**
-     * Test whether the parse method works.
-     *
-     * @covers ::parse
-     */
-    // TODO: Make sure this method doesn't fail if the date/time changed because of slow code.
-    public function testParse() {
-        // Test parsing a DateTime instance
-        $dateTime = DateTime::now();
-        $parsed = DateTime::parse($dateTime);
-        $this->assertEquals($dateTime, $parsed, 'Failed to parse a DateTime instance');
-
-        // Test parsing a different DateTime instance
-        $dateTime = DateTime::createTomorrow();
-        $parsed = DateTime::parse($dateTime);
-        $this->assertEquals($dateTime, $parsed, 'Failed to parse a DateTime instance');
-
-        // Make sure the timezone parameter is ignored when parsing DateTime objects
-        foreach(static::$TEST_TIMEZONES as $timezone) {
-            $dateTime = DateTime::createTomorrow($timezone);
-            $parsed = DateTime::parse($dateTime->copy(), 'Europe/Amsterdam');
-            $this->assertEquals($dateTime, $parsed, 'The preferred timezone shouldn\'t be used when parsing DateTime objects');
-        }
-
-        // Make sure the timezones remains when parsing DateTime objects
-        foreach(static::$TEST_TIMEZONES as $timezone) {
-            $dateTime = new DateTime('tomorrow', $timezone);
-            $parsed = DateTime::parse($dateTime->copy());
-            $this->assertEquals($dateTime, $parsed, 'Failed to parse a DateTime object without loosing the timezone');
-        }
-
-        // Test parsing PHPs DateTime object
-        $phpDateTime = DateTime::parse(new PHPDateTime('tomorrow'));
-        $dateTime = new DateTime('tomorrow');
-        $this->assertEquals($dateTime, $phpDateTime, 'Failed to parse PHPs DateTime object');
-
-        // Make sure the timezone parameter is ignored when parsing PHPs DateTime objects
-        foreach(static::$TEST_TIMEZONES as $timezone) {
-            $phpDateTime = new PHPDateTime('tomorrow', new PHPDateTimeZone($timezone));
-            $expected = DateTime::parse($phpDateTime);
-            $parsed = DateTime::parse($phpDateTime, 'Europe/Amsterdam');
-            $this->assertEquals($expected, $parsed,
-                'The preferred timezone shouldn\'t be used when parsing PHPs DateTime objects');
-        }
-
-        // Make sure the timezones remains when parsing PHPs DateTime objects
-        foreach(static::$TEST_TIMEZONES as $timezone) {
-            $dateTime = new PHPDateTime('tomorrow', new PHPDateTimeZone($timezone));
-            $parsed = DateTime::parse($dateTime);
-            $expected = DateTime::parse($dateTime);
-            $this->assertEquals($expected, $parsed, 'Failed to parse PHPs DateTime object because of a timezone difference');
-        }
-
-        // Test a normal timestamp
-        $timestamp = time();
-        $dateTimeTimestamp = DateTime::parse($timestamp)->getTimestamp();
-        $this->assertEquals($timestamp, $dateTimeTimestamp, 'Failed to parse a normal timestamp');
-
-        // Test a negative timestamp
-        $timestamp = -time();
-        $dateTimeTimestamp = DateTime::parse($timestamp)->getTimestamp();
-        $this->assertEquals($timestamp, $dateTimeTimestamp, 'Failed to parse a negative timestamp');
-
-        // Make sure the timezones are parsed correctly with a timestamp
-        $timestamp = time();
-        foreach(static::$TEST_TIMEZONES as $timezone) {
-            $dateTime = new DateTime($timestamp, $timezone);
-            $parsed = DateTime::parse($timestamp, $timezone);
-            $this->assertEquals($dateTime, $parsed, 'Failed to parse a timestamp with a timezone');
-        }
-
-        // Test each relative date and time
-        foreach(static::$TEST_RELATIVE_DATE_TIMES as $relativeDateTime) {
-            // Test parsing PHPs DateTime object
-            $expected = DateTime::parse(new PHPDateTime($relativeDateTime));
-            $parsed = DateTime::parse($relativeDateTime);
-            $this->assertEquals($expected, $parsed, 'Failed to parse a relative date and time of \'' . $relativeDateTime . '\'');
-        }
-
-        // Make sure the timezones are parsed correctly with a relative time
-        foreach(static::$TEST_TIMEZONES as $timezone) {
-            $dateTime = new DateTime('tomorrow', $timezone);
-            $parsed = DateTime::parse('tomorrow', $timezone);
-            $this->assertEquals($dateTime, $parsed, 'Failed to parse a relative date and time with a timezone');
-        }
-
-        // Test parsing PHPs DateTime object
-        $parsed = DateTime::parse(null);
-        $this->assertInstanceOf('carbon\core\datetime\DateTime', $parsed, 'Failed to parse null as now');
-
-        // Make sure the timezones are parsed correctly with a timestamp
-        foreach(static::$TEST_TIMEZONES as $timezone) {
-            $parsed = DateTime::parse(null, $timezone)->getTimezone()->getName();
-            $this->assertEquals($timezone, $parsed, 'Failed to parse a null as now with a timezone');
-        }
     }
 
     // TODO: Test method for __get, __isset, __set here!
