@@ -934,6 +934,43 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue(DateTime::hasMockNow(), 'Failed to check whether there\'s any mock date and time set');
     }
 
+    /**
+     * Test whether the setMockNow method works with a DateTime object.
+     *
+     * @covers ::setMockNow
+     *
+     * @depends testGetMockNowDefault
+     */
+    // TODO: Depends on parse.
+    public function testSetMockNowDateTime() {
+        // Set the mock date and time with a DateTime instance
+        $mockDateTime = DateTime::parse('-1 day');
+        DateTime::setMockNow($mockDateTime);
+
+        // Get and assert the mock date and time
+        $mock = DateTime::getMockNow();
+        $this->assertInstanceOf(self::OBJECT_DATETIME, $mock, 'Failed to get the mock date and time instance, an invalid object is returned');
+        $this->assertTrue($mockDateTime->equals($mock), 'The mock date and time is different than specified');
+    }
+
+    /**
+     * Test whether the setMockNow method works with null.
+     *
+     * @covers ::setMockNow
+     *
+     * @depends testGetMockNowDefault
+     * @depends testSetMockNowDateTime
+     */
+    // TODO: Depends on parse.
+    public function testSetMockNowNull() {
+        // Set the mock date and time and reset it afterwards
+        DateTime::setMockNow(DateTime::parse('-1 day'));
+        DateTime::setMockNow(null);
+
+        // Get and assert the mock date and time
+        $this->assertNull(DateTime::getMockNow(), 'Failed to set the mock date and time with null');
+    }
+
 
 
 
@@ -1037,36 +1074,6 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
     }
 
     // TODO: Test method for __get, __isset, __set here!
-
-
-    /**
-     * Test whether the setMockNow method works.
-     *
-     * @covers ::setMockNow
-     */
-    public function testSetMockNow() {
-        // The method should return null by default
-        $this->assertNull(DateTime::getMockNow(), 'Failed to get the mock date and time');
-
-        // Set the mock date and time with a DateTime instance
-        $mockDateTime = DateTime::parse('-1 day');
-        DateTime::setMockNow($mockDateTime);
-
-        // Get and test the mock date and time
-        $mock = DateTime::getMockNow();
-        $this->assertInstanceOf(self::OBJECT_DATETIME, $mock, 'Failed to get the mock date and time instance, an invalid object is returned');
-        $this->assertTrue($mockDateTime->equals($mock), 'The mock date and time is different than specified');
-
-        // Set the mock date and time with a relative date and time string
-        $relativeDateTime = '+1 day';
-        $mockDateTime = DateTime::parse($relativeDateTime);
-        DateTime::setMockNow($relativeDateTime);
-
-        // Get and test the mock date and time
-        $mock = DateTime::getMockNow();
-        $this->assertInstanceOf(self::OBJECT_DATETIME, $mock, 'Failed to get the mock date and time instance, an invalid object is returned');
-        $this->assertTrue($mockDateTime->equals($mock), 'The mock date and time is different than specified');
-    }
 
     /**
      * Get the default date and timezone as a string.
