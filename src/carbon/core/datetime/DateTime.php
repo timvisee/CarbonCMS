@@ -961,13 +961,27 @@ class DateTime extends PHPDateTime {
     /**
      * Set the timestamp.
      *
-     * @param int $timestamp The UNIX timestamp.
+     * @param int|null $timestamp The UNIX timestamp, or null to use the current timestamp.
      *
      * @return static A DateTime instance on success for method chaining.
      *
      * @throws InvalidTimestampException Throws InvalidTimestampException if the timestamp is invalid.
      */
     public function setTimestamp($timestamp) {
+        // Check whether the timestamp should be set to the current
+        if($timestamp === null) {
+            // Check whether we need to use a mock date and time
+            if(static::hasMockNow())
+                $timestamp = static::getMockNow()->getTimestamp();
+            else
+                $timestamp = time();
+
+            // Set the actual timestamp, return the result
+            if(parent::setTimestamp($timestamp) === false)
+                throw new InvalidTimestampException('Failed to set the timestamp to \'' . $timestamp . '\'');
+            return $this;
+        }
+
         // Set time timestamp, throw an exception on failure
         if(!is_long($timestamp) || parent::setTimestamp($timestamp) === false)
             throw new InvalidTimestampException('The given timestamp \'' . $timestamp . '\' is invalid');

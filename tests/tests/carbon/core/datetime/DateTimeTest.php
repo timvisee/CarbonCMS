@@ -554,6 +554,58 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($second, $dateTime->getSecond(), 'Failed to set the second of a DateTime instance');
     }
 
+    /**
+     * Test whether the setTimestamp method works with a timestamp.
+     *
+     * @covers ::setTimestamp
+     */
+    public function testSetTimestampPositive() {
+        // Specify a timestamp
+        $timestamp = 1234567890;
+
+        // Create a base DateTime object and set the timestamp
+        $dateTime = DateTime::now();
+        $dateTime->setTimestamp($timestamp);
+
+        // Assert the timestamp
+        $this->assertEquals($timestamp, $dateTime->getTimestamp(), 'Failed to set the timestamp of a DateTime instance');
+    }
+
+    /**
+     * Test whether the setTimestamp method works with a negative timestamp.
+     *
+     * @covers ::setTimestamp
+     *
+     * @depends testSetTimestampPositive
+     */
+    public function testSetTimestampNegative() {
+        // Specify a negative timestamp
+        $timestamp = -1234567890;
+
+        // Create a base DateTime object and set the timestamp
+        $dateTime = DateTime::now();
+        $dateTime->setTimestamp($timestamp);
+
+        // Assert the timestamp
+        $this->assertEquals($timestamp, $dateTime->getTimestamp(), 'Failed to set a negative timestamp of a DateTime instance');
+    }
+
+    /**
+     * Test whether the setTimestamp method works with a null parameter.
+     *
+     * @covers ::setTimestamp
+     *
+     * @depends testSetTimestampPositive
+     */
+    public function testSetTimestampNull() {
+        // Create a DateTime object and set the timestamp to null
+        $dateTime = DateTime::create(2000, 1, 2, 3, 4, 5);
+        $dateTime->setTimestamp(null);
+
+        // Make sure the date and time object doesn't differ more than 3 seconds with the current time
+        $this->lessThanOrEqual(3, DateTime::now()->diffInSeconds($dateTime, true), 'Failed to set the timestamp of a DateTime object with null, time difference too big');
+    }
+
 
 
     // TODO: Update the methods below
@@ -656,27 +708,6 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
     }
 
     // TODO: Test method for __get, __isset, __set here!
-
-    /**
-     * Test whether the setTimestamp method works.
-     *
-     * @covers ::setTimestamp
-     */
-    public function testSetTimestamp() {
-        // Test a specified timestamp
-        $timestamp = 1234567890;
-        $dateTime = DateTime::now();
-        $dateTime->setTimestamp($timestamp);
-        $dateTimeTimestamp = $dateTime->getTimestamp();
-        $this->assertEquals($timestamp, $dateTimeTimestamp, 'Failed to set the timestamp of a DateTime instance');
-
-        // Test a specified negative timestamp
-        $timestamp = -1234567890;
-        $dateTime = DateTime::now();
-        $dateTime->setTimestamp($timestamp);
-        $dateTimeTimestamp = $dateTime->getTimestamp();
-        $this->assertEquals($timestamp, $dateTimeTimestamp, 'Failed to set the timestamp of a DateTime instance to a negative number');
-    }
 
     /**
      * Test whether the getTimezone method works.
