@@ -190,15 +190,15 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
         $dateTime = new DateTime(null);
         $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to construct a DateTime object with null, wrong object type');
 
-        // Make sure the two date times don't differ much more than 3 seconds
-        $this->lessThanOrEqual(3, $baseDateTime->diffInSeconds($dateTime, true), 'Failed to construct a DateTime object with null, time difference too big');
+        // Make sure the two date times don't differ much more than 2 seconds
+        $this->lessThanOrEqual(2, $baseDateTime->diffInSeconds($dateTime, true), 'Failed to construct a DateTime object with null, time difference too big');
 
         // Construct a DateTime object with the now time using now
         $dateTime = new DateTime('now');
         $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to construct a DateTime object with null, wrong object type');
 
-        // Make sure the two date times don't differ much more than 3 seconds
-        $this->lessThanOrEqual(3, $baseDateTime->diffInSeconds($dateTime, true), 'Failed to construct a DateTime object with null, time difference too big');
+        // Make sure the two date times don't differ much more than 2 seconds
+        $this->lessThanOrEqual(2, $baseDateTime->diffInSeconds($dateTime, true), 'Failed to construct a DateTime object with null, time difference too big');
     }
 
     /**
@@ -213,8 +213,8 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
         $dateTime = DateTime::create();
         $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to create a DateTime object, wrong object type');
 
-        // Make sure the date and time object doesn't differ more than 3 seconds with the current time
-        $this->lessThanOrEqual(3, DateTime::now()->diffInSeconds($dateTime, true), 'Failed to create a DateTime object with null, time difference too big');
+        // Make sure the date and time object doesn't differ more than 2 seconds with the current time
+        $this->lessThanOrEqual(2, DateTime::now()->diffInSeconds($dateTime, true), 'Failed to create a DateTime object with null, time difference too big');
     }
 
     /**
@@ -270,8 +270,8 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
         $dateTime = DateTime::createFromDate();
         $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to create a DateTime object with a date, wrong object type');
 
-        // Make sure the date and time object doesn't differ more than 3 seconds with the current time
-        $this->lessThanOrEqual(3, DateTime::now()->diffInSeconds($dateTime, true), 'Failed to create a DateTime object with null, time difference too big');
+        // Make sure the date and time object doesn't differ more than 2 seconds with the current time
+        $this->lessThanOrEqual(2, DateTime::now()->diffInSeconds($dateTime, true), 'Failed to create a DateTime object with null, time difference too big');
     }
 
     /**
@@ -303,8 +303,8 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
         $dateTime = DateTime::createFromTime();
         $this->assertInstanceOf(static::OBJECT_DATETIME, $dateTime, 'Failed to create a DateTime object with a time, wrong object type');
 
-        // Make sure the date and time object doesn't differ more than 3 seconds with the current time
-        $this->lessThanOrEqual(3, DateTime::now()->diffInSeconds($dateTime, true), 'Failed to create a DateTime object with null, time difference too big');
+        // Make sure the date and time object doesn't differ more than 2 seconds with the current time
+        $this->lessThanOrEqual(2, DateTime::now()->diffInSeconds($dateTime, true), 'Failed to create a DateTime object with null, time difference too big');
     }
 
     /**
@@ -602,8 +602,8 @@ class DateTimeTest extends PHPUnit_Framework_TestCase {
         $dateTime = DateTime::create(2000, 1, 2, 3, 4, 5);
         $dateTime->setTimestamp(null);
 
-        // Make sure the date and time object doesn't differ more than 3 seconds with the current time
-        $this->lessThanOrEqual(3, DateTime::now()->diffInSeconds($dateTime, true), 'Failed to set the timestamp of a DateTime object with null, time difference too big');
+        // Make sure the date and time object doesn't differ more than 2 seconds with the current time
+        $this->lessThanOrEqual(2, DateTime::now()->diffInSeconds($dateTime, true), 'Failed to set the timestamp of a DateTime object with null, time difference too big');
     }
 
     /**
