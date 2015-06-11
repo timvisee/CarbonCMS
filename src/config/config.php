@@ -16,8 +16,8 @@ return Array(
     // TODO: Add site configuration to to the Carbon CMS registry (possibly optionally!)
 
     'general' => Array(
-        'site_url'          => 'http://localhost/app/carbon_cms/src/',
-        'site_path'         => '/app/carbon_cms/src'
+        'site_url'          => 'http://localhost/app/CarbonCMS/src/',
+        'site_path'         => '/app/CarbonCMS/src'
     ),
 
     'database' => Array(
