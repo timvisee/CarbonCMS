@@ -28,6 +28,7 @@ class Autoloader {
 
     // TODO: No other class can be loaded before the autoloader is initialized, make sure no other classes are used before this process is finished!
     // TODO: Maybe somehow pre-load the required classes before the initialization process.
+    // TODO: Full name initialize() vs init().
 
     /** @var bool Set whether the autoloader is initialized or not. */
     protected static $init = false;
@@ -57,6 +58,8 @@ class Autoloader {
         // Register the auto loader method
         if(spl_autoload_register(__CLASS__ . '::loadClass', false, true) === false)
             return false;
+
+        // TODO: Fall back to basic autoloader here?
 
         // Set the initialization flag to true and return
         static::$init = true;
@@ -226,6 +229,30 @@ class Autoloader {
             if($loader->load($className))
                 return true;
         }
+
+        // Failed to load the class, try to fall back on the backup loader
+        // Make sure the class is in the carbon core namespace
+        $coreNamespace = 'carbon\\core\\';
+        $coreNamespaceLen = strlen($coreNamespace);
+        if(substr($className, 0, $coreNamespaceLen) == $coreNamespace) {
+            // Remove the namespace prefix from the class name
+            $strippedClassName = substr($className, $coreNamespace);
+
+            // Build the path to load the class from
+            $classFile = CARBON_CORE_ROOT . DIRECTORY_SEPARATOR . $strippedClassName;
+
+            // Load the file if it exists
+            if(is_file($classFile)) {
+                static::loadClass($classFile);
+
+                // Return true if the class was loaded successfully
+                if(static::isClassLoaded($className))
+                    return true;
+            }
+        }
+
+        // Failed to load the class, return false
+        return false;
     }
 
     /**
@@ -251,7 +278,7 @@ class Autoloader {
      */
     public static function loadClassFile($classFile) {
         // Make sure the file exists
-        if(!file_exists($classFile))
+        if(!is_file($classFile))
             throw new CarbonException("Failed to load class file, the file path is invalid.");
 
         // Try to load the class file

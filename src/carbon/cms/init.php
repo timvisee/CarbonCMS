@@ -41,12 +41,13 @@ if(defined('CARBON_CORE_INIT'))
         return;
 
 // Load, initialize and set up the autoloader
-require(CARBON_CORE_ROOT . '/autoloader/Autoloader.php');
+require_once(CARBON_CORE_ROOT . '/autoloader/Autoloader.php');
 use carbon\core\autoloader\Autoloader;
 
-Autoloader::initialize(CARBON_SITE_ROOT);
-Autoloader::registerNamespace('carbon\\core', CARBON_CORE_ROOT);
-Autoloader::registerNamespace('carbon\\cms', CARBON_SITE_ROOT);
+// Initialize the autoloader and register the carbon core loader
+Autoloader::init();
+use carbon\core\autoloader\loader\CarbonCoreLoader;
+Autoloader::addLoader(new CarbonCoreLoader());
 
 // Carbon CMS initialized successfully, define the CARBON_CMS_INIT constant to store the initialization state
 /** Defines whether Carbon CMS is initialized successfully */
