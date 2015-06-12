@@ -26,16 +26,69 @@ defined('CARBON_CORE_INIT') or die('Access denied!');
  */
 class Autoloader {
 
+    /** @var bool Set whether the autoloader is initialized or not. */
+    protected static $init = false;
+
     /** @var array An array of loaders. */
-    private static $loaders = Array();
+    protected static $loaders = Array();
 
     /**
-     * Initialize.
+     * Initialize the autoloader.
+     * The autoloader must be initialized before it may be used.
+     *
+     * @return bool True on success, false on failure. True will also be returned if the autoloader was initialized already.
      */
     public static function init() {
+        // Make sure the autoloader isn't initialized already
+        if(static::isInit())
+            return true;
+
+        // Clear the list of loaders
+        static::removeAllLoaders();
+
         // Construct the Carbon CORE loader, and add it to the loaders list
         $coreLoader = new CarbonCoreLoader();
         static::addLoader($coreLoader);
+
+        // Register the auto loader method
+        if(spl_autoload_register(__CLASS__ . '::loadClass', false, true) === false)
+            return false;
+
+        // Set the initialization flag to true and return
+        static::$init = true;
+        return true;
+    }
+
+    /**
+     * Check whether the autoloader is initialized or not.
+     *
+     * @return bool True if the autoloader is initialized, false otherwise.
+     */
+    public static function isInit() {
+        return static::$init;
+    }
+
+    /**
+     * Finalize the autoloader. The autoloader should be initialized before it may be finalized.
+     * The autoloader may not be used after it has been finalized unless it's initialized again.
+     *
+     * @return bool True on success, false on failure. True will also be returned if the autoloader wasn't initialized.
+     */
+    public static function finalize() {
+        // Make sure the autoloader is initialized
+        if(!static::isInit())
+            return true;
+
+        // Unregister the autoloader function
+        if(spl_autoload_unregister(__CLASS__ . '::loadClass') === false)
+            return false;
+
+        // Clear the list of loaders
+        static::removeAllLoaders();
+
+        // Set the initialization flag, return the result
+        static::$init = false;
+        return true;
     }
 
     /**
@@ -73,6 +126,73 @@ class Autoloader {
      */
     public static function getLoaderCount() {
         return sizeof(static::getLoaders());
+    }
+
+    /**
+     * Check whether a specific loader is available.
+     *
+     * @param BaseLoader $loader The loader to check for.
+     *
+     * @return bool True if this loader is available, false otherwise.
+     *
+     * @throws CarbonException Throws if the <var>$loader</var> instance is invalid.
+     */
+    public static function hasLoader($loader) {
+        // Make sure the loader instance is valid
+        if(!($loader instanceof BaseLoader))
+            throw new CarbonException("Failed to check whether a loader is available, because the instance is invalid.");
+
+        // Check whether this is one of the available loaders, return the result
+        return in_array($loader, static::$loaders);
+    }
+
+    /**
+     * Remove a loader.
+     *
+     * @param BaseLoader|int $loader The loader instance, or the index of the loader.
+     *
+     * @return bool True if any loader was removed, false otherwise.
+     *
+     * @throws CarbonException Throws if the loader index is out of bound.
+     */
+    public static function removeLoader($loader) {
+        // Remove the loader by index if the param is an integer
+        if(is_int($loader)) {
+            // Make sure the index is in-bound
+            if($loader < 0 || $loader >= static::getLoaderCount())
+                throw new CarbonException("Failed to remove loader, index out of bound.");
+
+            // Remove the actual loader, and re-index the array
+            unset(static::$loaders[$loader]);
+            static::$loaders = array_values(static::$loaders);
+            return true;
+        }
+
+        // Remove an actual loader instance
+        else if($loader instanceof BaseLoader) {
+            // Get all array elements that contain this loader, return false if there's none
+            $removeLoaders = array_keys(static::$loaders, $loader);
+            if(sizeof($removeLoaders) == 0)
+                return false;
+
+            // Remove the loaders
+            foreach($removeLoaders as $key)
+                unset(static::$loaders[$key]);
+
+            // Re-index the loaders list and returh the result
+            static::$loaders = array_values(static::$loaders);
+            return true;
+        }
+
+        // Failed to remove loader, return false
+        return false;
+    }
+
+    /**
+     * Remove all the available loaders.
+     */
+    public static function removeAllLoaders() {
+        static::$loaders = Array();
     }
 
     /**
