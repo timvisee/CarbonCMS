@@ -26,6 +26,9 @@ defined('CARBON_CORE_INIT') or die('Access denied!');
  */
 class Autoloader {
 
+    // TODO: No other class can be loaded before the autoloader is initialized, make sure no other classes are used before this process is finished!
+    // TODO: Maybe somehow pre-load the required classes before the initialization process.
+
     /** @var bool Set whether the autoloader is initialized or not. */
     protected static $init = false;
 
@@ -38,6 +41,7 @@ class Autoloader {
      *
      * @return bool True on success, false on failure. True will also be returned if the autoloader was initialized already.
      */
+    // TODO: Throw exception if the initialization failed!
     public static function init() {
         // Make sure the autoloader isn't initialized already
         if(static::isInit())
@@ -179,7 +183,7 @@ class Autoloader {
             foreach($removeLoaders as $key)
                 unset(static::$loaders[$key]);
 
-            // Re-index the loaders list and returh the result
+            // Re-index the loaders list and return the result
             static::$loaders = array_values(static::$loaders);
             return true;
         }
@@ -199,16 +203,60 @@ class Autoloader {
      * Load a class specified by it's class name.
      *
      * @param string $className The full name of the class to load.
+     *
+     * @return bool True if the class was loaded, false if not.
      */
     public static function loadClass($className) {
+        // Show a debug message
+        // TODO: Remove this on release!
+        if(!(defined('CARBON_CORE_TEST') && CARBON_CORE_TEST))
+            echo '[AutoLoader] Loading class: ' . $className . '<br />';
+
+        // Make sure the class isn't loaded already
+        if(static::isClassLoaded($className))
+            return true;
+
         // Load the class through all loaders
         foreach(static::$loaders as $loader) {
             // Make sure the loader is of a valid instance
             if(!($loader instanceof BaseLoader))
                 continue;
 
-            // Try to load the class
-            $loader->load($className);
+            // Try to load the class, return true if it's loaded successfully
+            if($loader->load($className))
+                return true;
         }
+    }
+
+    /**
+     * Check whether a class is loaded.
+     *
+     * @param string $className The full name of the class, with it's namespace included.
+     *
+     * @return bool True if the class is loaded, false if not.
+     */
+    // TODO: Handle invalid instances.
+    public static function isClassLoaded($className) {
+        return class_exists($className, false);
+    }
+
+    /**
+     * Load a class file.
+     *
+     * @param string $classFile The file path of the class file to load.
+     *
+     * @return bool True on success, false on failure.
+     *
+     * @throws CarbonException Throws if the class file path is invalid.
+     */
+    public static function loadClassFile($classFile) {
+        // Make sure the file exists
+        if(!file_exists($classFile))
+            throw new CarbonException("Failed to load class file, the file path is invalid.");
+
+        // Try to load the class file
+        /** @noinspection PhpIncludeInspection */
+        require_once($classFile);
+        return true;
     }
 }
