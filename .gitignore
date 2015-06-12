@@ -9,6 +9,7 @@
 ##########################################################################
 
 # Ignore some development directories
+/.idea
 /old
 /tools
 
