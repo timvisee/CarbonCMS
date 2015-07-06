@@ -36,6 +36,12 @@ class Autoloader {
     /** @var array An array of loaders. */
     protected static $loaders = Array();
 
+    // TODO: Update these constants below!
+    /** @const string The root namespace, used by the fallback autoloader. */
+    const ROOT_NAMESPACE = "carbon\\core";
+    /** @const string The directory of the root namespace, used by the fallback autoloader. */
+    const ROOT_DIRECTORY = "../";
+
     /**
      * Initialize the autoloader.
      * The autoloader must be initialized before it may be used.
@@ -230,7 +236,7 @@ class Autoloader {
                 return true;
         }
 
-        // Failed to load the class, try to fall back on the backup loader
+        // Failed to load the class, try to fall back to this basic autoloader
         // Make sure the class is in the carbon core namespace
         $coreNamespace = 'carbon\\core\\';
         $coreNamespaceLen = strlen($coreNamespace);
