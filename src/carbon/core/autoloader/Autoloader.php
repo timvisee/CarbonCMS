@@ -37,10 +37,10 @@ class Autoloader {
     protected static $loaders = Array();
 
     // TODO: Update these constants below!
-    /** @const string The root namespace, used by the fallback autoloader. */
-    const ROOT_NAMESPACE = "carbon\\core";
-    /** @const string The directory of the root namespace, used by the fallback autoloader. */
-    const ROOT_DIRECTORY = "../";
+    /** @const string The core namespace, used by the fallback autoloader. */
+    const CORE_NAMESPACE = "carbon\\core";
+    /** @const string The core namespace directory, used by the fallback autoloader. */
+    const CORE_NAMESPACE_DIR = CARBON_CORE_ROOT;
 
     /**
      * Initialize the autoloader.
@@ -238,14 +238,16 @@ class Autoloader {
 
         // Failed to load the class, try to fall back to this basic autoloader
         // Make sure the class is in the carbon core namespace
-        $coreNamespace = 'carbon\\core\\';
+        // TODO: Should we append a backslash here?
+        $coreNamespace = static::CORE_NAMESPACE . '\\';
         $coreNamespaceLen = strlen($coreNamespace);
         if(substr($className, 0, $coreNamespaceLen) == $coreNamespace) {
             // Remove the namespace prefix from the class name
             $strippedClassName = substr($className, $coreNamespace);
 
             // Build the path to load the class from
-            $classFile = CARBON_CORE_ROOT . DIRECTORY_SEPARATOR . $strippedClassName;
+            // TODO: Should we append separator here?
+            $classFile = static::CORE_NAMESPACE_DIR . DIRECTORY_SEPARATOR . $strippedClassName;
 
             // Load the file if it exists
             if(is_file($classFile)) {
