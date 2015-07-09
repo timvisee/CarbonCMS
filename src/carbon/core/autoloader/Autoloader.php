@@ -40,6 +40,7 @@ class Autoloader {
     const CORE_NAMESPACE = "carbon\\core";
     /** @const string The core namespace directory, used by the fallback autoloader. */
     const CORE_NAMESPACE_DIR = CARBON_CORE_ROOT;
+    const CORE_NAMESPACE_FILE_EXTENSION = '.php';
 
     /**
      * Initialize the autoloader.
@@ -53,16 +54,16 @@ class Autoloader {
         if(static::isInit())
             return true;
 
+        // Register the auto loader method
+        if(spl_autoload_register(__CLASS__ . '::loadClass', false, true) === false)
+            return false;
+
         // Clear the list of loaders
         static::removeAllLoaders();
 
         // Construct the Carbon CORE loader, and add it to the loaders list
         $coreLoader = new CarbonCoreLoader();
         static::addLoader($coreLoader);
-
-        // Register the auto loader method
-        if(spl_autoload_register(__CLASS__ . '::loadClass', false, true) === false)
-            return false;
 
         // TODO: Fall back to basic autoloader here?
 
@@ -247,12 +248,13 @@ class Autoloader {
             $strippedClassName = substr($className, $coreNamespaceLen);
 
             // Determine the path to load the class file from
-            $classFile = rtrim(static::CORE_NAMESPACE_DIR, '/\\') . DIRECTORY_SEPARATOR . $strippedClassName;
+            $classFile = rtrim(static::CORE_NAMESPACE_DIR, '/\\') . DIRECTORY_SEPARATOR . $strippedClassName . static::CORE_NAMESPACE_FILE_EXTENSION;
 
             // Load the file if it exists
             if(is_file($classFile)) {
                 // Load the class file
-                // TODO: Load the actual file here!
+                /** @noinspection PhpIncludeInspection */
+                require_once($classFile);
 
                 // Check whether the class is loaded successfully
                 if(static::isClassLoaded($className))

@@ -25,12 +25,15 @@ define('CARBON_CORE_VERSION_CODE', 1);
 /** Define the version name of the current installed Carbon Core instance */
 define('CARBON_CORE_VERSION_NAME', '0.1');
 
+/** Defines whether Carbon Core is initializing or initialized. */
+define('CARBON_CORE_INIT', true);
+
 // Load and use the autoloader class
 require_once(CARBON_CORE_ROOT . '/autoloader/Autoloader.php');
 use carbon\core\autoloader\Autoloader;
 
 // Set up the autoloader for Carbon CORE
-Autoloader::initialize();
+Autoloader::init();
 Autoloader::registerNamespace('carbon\\core', CARBON_CORE_ROOT);
 Autoloader::registerNamespace('carbon\\cms', CARBON_SITE_ROOT);
 
@@ -48,5 +51,5 @@ Autoloader::registerNamespace('carbon\\cms', CARBON_SITE_ROOT);
 
 
 // Carbon Core initialized successfully, define the CARBON_CORE_INIT constant to store the initialization state
-/** Defines whether Carbon Core is initialized successfully */
-define('CARBON_CORE_INIT', true);
+/** Defines whether Carbon Core is initialized successfully. */
+define('CARBON_CORE_INIT_DONE', true);

@@ -51,4 +51,5 @@ Autoloader::addLoader(new CarbonCoreLoader());
 
 // Carbon CMS initialized successfully, define the CARBON_CMS_INIT constant to store the initialization state
 /** Defines whether Carbon CMS is initialized successfully */
+// TODO: Define a CARBON_CMS_INIT and CARBON_CMS_INIT_DONE constant, not just one!
 define('CARBON_CMS_INIT', true);

@@ -1,5 +1,9 @@
 <?php
 
+// Enable PHPs debugging mode
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+
 /**
  * This file contains test code which will be executed before Carbon CMS starts. This test code is for development only.
  */
