@@ -62,6 +62,7 @@ class Autoloader {
         static::removeAllLoaders();
 
         // Construct the Carbon CORE loader, and add it to the loaders list
+        // TODO: Should we add the core loader here?
         $coreLoader = new CarbonCoreLoader();
         static::addLoader($coreLoader);
 
@@ -87,6 +88,7 @@ class Autoloader {
      *
      * @return bool True on success, false on failure. True will also be returned if the autoloader wasn't initialized.
      */
+    // TODO: Rename this method to exit?
     public static function finalize() {
         // Make sure the autoloader is initialized
         if(!static::isInit())

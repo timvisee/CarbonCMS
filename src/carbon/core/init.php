@@ -1,5 +1,6 @@
 <?php
 
+// TODO: Remove the CORE initializer, because the CORE shouldn't be run a standalone.
 // TODO: Create a constant with the required PHP version number
 
 // Make sure the current PHP version is supported
@@ -31,25 +32,12 @@ define('CARBON_CORE_INIT', true);
 // Load and use the autoloader class
 require_once(CARBON_CORE_ROOT . '/autoloader/Autoloader.php');
 use carbon\core\autoloader\Autoloader;
+use carbon\core\autoloader\loader\CarbonCoreLoader;
 
 // Set up the autoloader for Carbon CORE
 Autoloader::init();
-Autoloader::registerNamespace('carbon\\core', CARBON_CORE_ROOT);
-Autoloader::registerNamespace('carbon\\cms', CARBON_SITE_ROOT);
+Autoloader::addLoader(new CarbonCoreLoader());
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Carbon Core initialized successfully, define the CARBON_CORE_INIT constant to store the initialization state
+// Carbon Core initialized successfully, define the CARBON_CORE_INIT_DONE constant to store the initialization state
 /** Defines whether Carbon Core is initialized successfully. */
 define('CARBON_CORE_INIT_DONE', true);

@@ -27,6 +27,9 @@ define('CARBON_CMS_VERSION_NAME', '0.1');
 /** Defines the file path of the Carbon CMS configuration file */
 define('CARBON_CMS_CONFIG', CARBON_SITE_ROOT . '/config/config.php');
 
+/** Defines whether Carbon CMS is initializing or initialized. */
+define('CARBON_CMS_INIT', true);
+
 // Set the configuration file for Carbon Core
 // TODO: Improve the quality of this code part bellow!
 /** Defines the file path of the Carbon Core configuration file */
@@ -42,14 +45,14 @@ if(defined('CARBON_CORE_INIT'))
 
 // Load, initialize and set up the autoloader
 require_once(CARBON_CORE_ROOT . '/autoloader/Autoloader.php');
+require_once(CARBON_CMS_ROOT . '/autoloader/loader/CarbonCMSLoader.php');
+use carbon\cms\autoloader\loader\CarbonCMSLoader;
 use carbon\core\autoloader\Autoloader;
 
 // Initialize the autoloader and register the carbon core loader
 Autoloader::init();
-use carbon\core\autoloader\loader\CarbonCoreLoader;
-Autoloader::addLoader(new CarbonCoreLoader());
+Autoloader::addLoader(new CarbonCMSLoader());
 
-// Carbon CMS initialized successfully, define the CARBON_CMS_INIT constant to store the initialization state
-/** Defines whether Carbon CMS is initialized successfully */
-// TODO: Define a CARBON_CMS_INIT and CARBON_CMS_INIT_DONE constant, not just one!
-define('CARBON_CMS_INIT', true);
+// Carbon CMS initialized successfully, define the CARBON_CMS_INIT_DONE constant to store the initialization state
+/** Defines whether Carbon CMS is initialized successfully. */
+define('CARBON_CMS_INIT_DONE', true);

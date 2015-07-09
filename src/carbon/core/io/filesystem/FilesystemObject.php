@@ -30,6 +30,7 @@ defined('CARBON_CORE_INIT') or die('Access denied!');
  */
 class FilesystemObject {
 
+    // TODO: ::join($a, $b) method to join two paths!
     // TODO: Add support for disks, external servers and so on, see: http://laravel.com/docs/5.0/filesystem
 
     /** @var string Defines the path. */
