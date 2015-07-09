@@ -28,7 +28,6 @@ class Autoloader {
 
     // TODO: No other class can be loaded before the autoloader is initialized, make sure no other classes are used before this process is finished!
     // TODO: Maybe somehow pre-load the required classes before the initialization process.
-    // TODO: Full name initialize() vs init().
 
     /** @var bool Set whether the autoloader is initialized or not. */
     protected static $init = false;
@@ -236,24 +235,26 @@ class Autoloader {
                 return true;
         }
 
-        // Failed to load the class, try to fall back to this basic autoloader
-        // Make sure the class is in the carbon core namespace
-        // TODO: Should we append a backslash here?
-        $coreNamespace = static::CORE_NAMESPACE . '\\';
+        // Unable to load the class, try to load with fallback autoloader
+
+        // Get the core namespace and it's length, suffixed with backslash
+        $coreNamespace = rtrim(static::CORE_NAMESPACE, '\\') . '\\';
         $coreNamespaceLen = strlen($coreNamespace);
+
+        // Check whether the class being loaded is in the namespace
         if(substr($className, 0, $coreNamespaceLen) == $coreNamespace) {
             // Remove the namespace prefix from the class name
-            $strippedClassName = substr($className, $coreNamespace);
+            $strippedClassName = substr($className, $coreNamespaceLen);
 
-            // Build the path to load the class from
-            // TODO: Should we append separator here?
-            $classFile = static::CORE_NAMESPACE_DIR . DIRECTORY_SEPARATOR . $strippedClassName;
+            // Determine the path to load the class file from
+            $classFile = rtrim(static::CORE_NAMESPACE_DIR, '/\\') . DIRECTORY_SEPARATOR . $strippedClassName;
 
             // Load the file if it exists
             if(is_file($classFile)) {
-                static::loadClass($classFile);
+                // Load the class file
+                // TODO: Load the actual file here!
 
-                // Return true if the class was loaded successfully
+                // Check whether the class is loaded successfully
                 if(static::isClassLoaded($className))
                     return true;
             }
