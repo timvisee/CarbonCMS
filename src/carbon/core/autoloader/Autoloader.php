@@ -35,7 +35,9 @@ class Autoloader {
     /** @var array An array of loaders. */
     protected static $loaders = Array();
 
-    // TODO: Update these constants below!
+    /** @var bool True to enable and use the fallback autoloader, false to disable this feature. */
+    protected static $fallbackEnabled = true;
+
     /** @const string The namespace to use for the fallback loader. */
     const FALLBACK_LOADER_NAMESPACE = 'carbon\\core\\';
     /** @const string The directory to load classes from with the fallback loader. */
@@ -239,7 +241,9 @@ class Autoloader {
                 return true;
         }
 
-        // Unable to load the class, try to load with fallback autoloader
+        // Unable to load the class, try to load with fallback autoloader if enabled
+        if(!static::isFallbackEnabled())
+            return false;
 
         // Get the fallback namespace and it's length, suffixed with a single backslash
         $coreNamespace = rtrim(static::FALLBACK_LOADER_NAMESPACE, '\\') . '\\';
@@ -299,5 +303,23 @@ class Autoloader {
         /** @noinspection PhpIncludeInspection */
         require_once($classFile);
         return true;
+    }
+
+    /**
+     * Check whether the fallback loader is enabled.
+     *
+     * @return bool True if enabled, false if not.
+     */
+    public static function isFallbackEnabled() {
+        return static::$fallbackEnabled;
+    }
+
+    /**
+     * Set whether the fallback loader is enabled.
+     *
+     * @param bool $fallbackEnabled True if enabled, false if not.
+     */
+    public static function setFallbackEnabled($fallbackEnabled) {
+        static::$fallbackEnabled = $fallbackEnabled;
     }
 }
