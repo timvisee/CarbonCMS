@@ -26,9 +26,6 @@ defined('CARBON_CORE_INIT') or die('Access denied!');
  */
 class Autoloader {
 
-    // TODO: No other class can be loaded before the autoloader is initialized, make sure no other classes are used before this process is finished!
-    // TODO: Maybe somehow pre-load the required classes before the initialization process.
-
     /** @var bool Set whether the autoloader is initialized or not. */
     protected static $init = false;
 
@@ -61,15 +58,13 @@ class Autoloader {
         if(spl_autoload_register(__CLASS__ . '::loadClass', false, true) === false)
             return false;
 
-        // Clear the list of loaders
+        // Clear the list of current loaders
         static::removeAllLoaders();
 
-        // Construct the Carbon CORE loader, and add it to the loaders list
-        // TODO: Should we add the core loader here?
+        // Construct the Carbon Core loader, and add it to the loaders list
+        // TODO: Should we add the core loader here, or is this done elsewhere?
         $coreLoader = new CarbonCoreLoader();
         static::addLoader($coreLoader);
-
-        // TODO: Fall back to basic autoloader here?
 
         // Set the initialization flag to true and return
         static::$init = true;
