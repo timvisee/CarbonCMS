@@ -3,19 +3,9 @@
 // Prevent direct requests to this file due to security reasons
 defined('CARBON_SITE_ROOT') or die('Access denied!');
 
-// TODO: Remove the CORE initializer, because the CORE shouldn't be run a standalone.
-
-// Make sure the current PHP version is supported
-if(version_compare(phpversion(), '5.3.1', '<'))
-    // PHP version the server is running is not supported, show an error message
-    // TODO: Show proper error message
-    die('This server is running PHP ' . phpversion() . ', the required PHP version to start Carbon Core is PHP 5.3.1 or higher,
-            please install PHP 5.3.1 or higher on your server!');
-
-// Make sure Carbon Core isn't initialized already
-if(defined('CARBON_CORE_INIT'))
-    if(CARBON_CORE_INIT === true)
-        return;
+// Make sure Carbon Core is only initialized once
+if(defined('CARBON_CORE_INIT_DONE') && CARBON_CORE_INIT_DONE === true)
+    return;
 
 // Define various Carbon Core constants
 /** The Carbon Core namespace. */
@@ -28,6 +18,13 @@ define('CARBON_CORE_ROOT', __DIR__);
 define('CARBON_CORE_VERSION_NAME', '0.1');
 /** The version code of the currently installed Carbon Core instance. */
 define('CARBON_CORE_VERSION_CODE', 1);
+
+// Make sure the current PHP version is supported
+if(version_compare(phpversion(), CARBON_CORE_PHP_VERSION_REQUIRED, '<'))
+    // PHP version the server is running is not supported, show an error message
+    // TODO: Show proper error message
+    die('This server is running PHP ' . phpversion() . ', the required PHP version to start Carbon Core is PHP 5.3.1 or higher,
+            please install PHP 5.3.1 or higher on your server!');
 
 /** Defines whether Carbon Core is initializing or initialized. */
 define('CARBON_CORE_INIT', true);

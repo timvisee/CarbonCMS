@@ -31,7 +31,7 @@ if(version_compare(phpversion(), CARBON_CMS_PHP_VERSION_REQUIRED, '<'))
 /** Defines whether Carbon CMS is initializing or initialized. */
 define('CARBON_CMS_INIT', true);
 
-// TODO: Improve the statement below!
+// TODO: Improve the statement below?
 /** Defines the file path of the Carbon Core configuration file */
 define('CARBON_CORE_CONFIG', CARBON_CMS_CONFIG);
 
