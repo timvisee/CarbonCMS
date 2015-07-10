@@ -2,6 +2,8 @@
 
 /**
  * CarbonCMSLoader.php
+ *
+ * An autoloader loader to load Carbon CMS classes and files.
  */
 
 namespace carbon\cms\autoloader\loader;
@@ -13,15 +15,12 @@ defined('CARBON_CMS_INIT') or die('Access denied!');
 
 class CarbonCMSLoader extends FileLoader {
 
-    /** @const string The Carbon CMS namespace. */
-    // TODO: Define this as a constant in the initialization file!
-    const CARBON_CMS_NAMESPACE = 'carbon\\cms\\';
-
     /**
      * Constructor.
+     *
+     * Set up a file loader for Carbon CMS classes and files.
      */
     public function __construct() {
-        // Initialize the file loader with the Carbon CMS namespace and root directory
-        parent::__construct(static::CARBON_CMS_NAMESPACE, CARBON_CMS_ROOT);
+        parent::__construct(CARBON_CMS_NAMESPACE, CARBON_CMS_ROOT);
     }
 }

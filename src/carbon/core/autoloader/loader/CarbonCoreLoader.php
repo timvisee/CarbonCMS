@@ -2,6 +2,8 @@
 
 /**
  * CarbonCoreLoader.php
+ *
+ * An autoloader loader to load Carbon Core classes and files.
  */
 
 namespace carbon\core\autoloader\loader;
@@ -11,15 +13,12 @@ defined('CARBON_CORE_INIT') or die('Access denied!');
 
 class CarbonCoreLoader extends FileLoader {
 
-    /** @const string The Carbon CORE namespace. */
-    // TODO: Define this as a constant in the initialization file!
-    const CARBON_CORE_NAMESPACE = 'carbon\\core\\';
-
     /**
      * Constructor.
+     *
+     * Set up a file loader for Carbon Core classes and files.
      */
     public function __construct() {
-        // Initialize the file loader with the Carbon CORE namespace and root directory
-        parent::__construct(static::CARBON_CORE_NAMESPACE, CARBON_CORE_ROOT);
+        parent::__construct(CARBON_CORE_NAMESPACE, CARBON_CORE_ROOT);
     }
 }

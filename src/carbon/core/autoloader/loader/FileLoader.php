@@ -2,6 +2,8 @@
 
 /**
  * FileLoader.php
+ *
+ * An autoloader loader to load files from a path based on their namespace.
  */
 
 namespace carbon\core\autoloader\loader;
