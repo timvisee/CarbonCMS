@@ -36,11 +36,12 @@ class Autoloader {
     protected static $loaders = Array();
 
     // TODO: Update these constants below!
-    /** @const string The core namespace, used by the fallback autoloader. */
-    const CORE_NAMESPACE = "carbon\\core";
-    /** @const string The core namespace directory, used by the fallback autoloader. */
-    const CORE_NAMESPACE_DIR = CARBON_CORE_ROOT;
-    const CORE_NAMESPACE_FILE_EXTENSION = '.php';
+    /** @const string The namespace to use for the fallback loader. */
+    const FALLBACK_LOADER_NAMESPACE = 'carbon\\core\\';
+    /** @const string The directory to load classes from with the fallback loader. */
+    const FALLBACK_LOADER_DIR = CARBON_CORE_ROOT;
+    /** @const string The file extension of the class files to load with the fallback loader. */
+    const FALLBACK_LOADER_FILE_EXTENSION = '.php';
 
     /**
      * Initialize the autoloader.
@@ -240,8 +241,8 @@ class Autoloader {
 
         // Unable to load the class, try to load with fallback autoloader
 
-        // Get the core namespace and it's length, suffixed with backslash
-        $coreNamespace = rtrim(static::CORE_NAMESPACE, '\\') . '\\';
+        // Get the fallback namespace and it's length, suffixed with a single backslash
+        $coreNamespace = rtrim(static::FALLBACK_LOADER_NAMESPACE, '\\') . '\\';
         $coreNamespaceLen = strlen($coreNamespace);
 
         // Check whether the class being loaded is in the namespace
@@ -250,7 +251,7 @@ class Autoloader {
             $strippedClassName = substr($className, $coreNamespaceLen);
 
             // Determine the path to load the class file from
-            $classFile = rtrim(static::CORE_NAMESPACE_DIR, '/\\') . DIRECTORY_SEPARATOR . $strippedClassName . static::CORE_NAMESPACE_FILE_EXTENSION;
+            $classFile = rtrim(static::FALLBACK_LOADER_DIR, '/\\') . DIRECTORY_SEPARATOR . $strippedClassName . static::FALLBACK_LOADER_FILE_EXTENSION;
 
             // Load the file if it exists
             if(is_file($classFile)) {

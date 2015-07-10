@@ -2,6 +2,8 @@
 
 /**
  * BaseLoader.php
+ *
+ * This base loader provides a basic interface for autoloader loaders.
  */
 
 namespace carbon\core\autoloader\loader;
