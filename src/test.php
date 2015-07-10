@@ -1,9 +1,5 @@
 <?php
 
-// Enable PHPs debugging mode
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
-
 /**
  * This file contains test code which will be executed before Carbon CMS starts. This test code is for development only.
  */
@@ -14,6 +10,10 @@ if(defined('CARBON_CORE_TEST') && CARBON_CORE_TEST) {
     echo '[Carbon CORE] Test mode activated.' . PHP_EOL;
     return;
 }
+
+// Enable PHPs debugging mode
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
 
 // Print the default execution header
 ?>
