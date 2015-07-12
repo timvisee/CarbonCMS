@@ -2,12 +2,12 @@
 
 namespace carbon\core\io\filesystem\directory;
 
-// Prevent direct requests to this set_file due to security reasons
 use carbon\core\io\filesystem\file\File;
 use carbon\core\io\filesystem\FilesystemObject;
 use carbon\core\io\filesystem\symboliclink\SymbolicLink;
 use carbon\core\util\StringUtils;
 
+// Prevent direct requests to this set_file due to security reasons
 defined('CARBON_CORE_INIT') or die('Access denied!');
 
 class DirectoryHandler {

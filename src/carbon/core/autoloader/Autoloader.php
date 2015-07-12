@@ -236,8 +236,21 @@ class Autoloader {
                 return true;
         }
 
-        // Unable to load the class, try to load with fallback autoloader if enabled
-        if(!static::isFallbackEnabled())
+        // Failed to load the class, try to use the fallback loader, return the result
+        return static::loadClassFallback($className);
+    }
+
+    /**
+     * Load a class specified by it's class name using the fallback loader.
+     *
+     * @param string $className The full name of the class to load.
+     * @param bool $force [optional] True to use the fallback loader even if it's disabled, false otherwise.
+     *
+     * @return bool True if the class was loaded successfully, false otherwise.
+     */
+    public static function loadClassFallback($className, $force = false) {
+        // Make sure the fallback loader is enabled
+        if(!static::isFallbackEnabled() && !$force)
             return false;
 
         // Get the fallback namespace and it's length, suffixed with a single backslash
@@ -311,6 +324,8 @@ class Autoloader {
 
     /**
      * Set whether the fallback loader is enabled.
+     * Its recommended to keep the fallback loader enabled, because it's used to load some core classes when
+     * initializing some Carbon Core components.
      *
      * @param bool $fallbackEnabled True if enabled, false if not.
      */
